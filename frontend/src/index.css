@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Work Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Custom Color Palette - Warm & Organic */
+:root {
+  --terracotta: #D8725F;
+  --terracotta-dark: #C25847;
+  --sage: #8FA882;
+  --sand: #F5EFE6;
+  --warm-white: #FFF9F3;
+  --charcoal: #2C3539;
+}
+
+.bg-terracotta { background-color: var(--terracotta); }
+.bg-terracottaDark { background-color: var(--terracotta-dark); }
+.bg-sage { background-color: var(--sage); }
+.bg-sand { background-color: var(--sand); }
+.bg-warmWhite { background-color: var(--warm-white); }
+.bg-charcoal { background-color: var(--charcoal); }
+
+.text-terracotta { color: var(--terracotta); }
+.text-terracottaDark { color: var(--terracotta-dark); }
+.text-sage { color: var(--sage); }
+.text-charcoal { color: var(--charcoal); }
+
+.border-terracotta { border-color: var(--terracotta); }
+.border-sand { border-color: var(--sand); }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fadeInScale {
+  animation: fadeInScale 0.5s ease-out forwards;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+button, a, input, textarea, select {
+  transition: all 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sand);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terracotta);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terracotta-dark);
+}
+
+/* Focus states */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(216, 114, 95, 0.1);
+}
+
+/* Hover effects */
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Animations observer */
+[data-animate] {
+  opacity: 0;
+}
+
+[data-animate].visible {
+  opacity: 1;
+}
