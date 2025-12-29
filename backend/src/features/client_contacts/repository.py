@@ -11,7 +11,7 @@ class ClientContactInformationRepository(BaseRepository[ClientContactInformation
 
     async def get_by_email(self, email: str) -> Optional[ClientContactInformation]:
         """Get user by email"""
-        statement = select().where(ClientContactInformation.email == email)
+        statement = select(ClientContactInformation).where(ClientContactInformation.email == email)
         result = await self.session.execute(statement)
         return result.scalar_one_or_none()
     

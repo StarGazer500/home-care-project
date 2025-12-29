@@ -16,6 +16,7 @@ from src.core.config import settings
 # Import all models so Alembic can detect them
 from src.features.accounts.models import User
 from src.features.client_contacts.models import ClientContactInformation
+from src.features.appointments.models import Appointment
 # Add new models here when you create them
 
 # this is the Alembic Config object, which provides

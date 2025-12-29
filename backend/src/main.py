@@ -15,6 +15,7 @@ from src.core.config import settings
 # Import all feature routers
 from src.features.accounts.router import router as accounts_router
 from src.features.client_contacts.router import router as client_contacts_router
+from src.features.appointments.router import router as appointments_router
 
 
 @asynccontextmanager
@@ -44,6 +45,7 @@ app.add_middleware(
 # Register all routers
 app.include_router(accounts_router, prefix="/api/v1")
 app.include_router(client_contacts_router, prefix="/api/v1")
+app.include_router(appointments_router, prefix="/api/v1")
 
 
 @app.get("/")

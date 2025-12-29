@@ -10,7 +10,8 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=100)
-    
+    role: Optional[str] = Field(default="user")
+
     @validator('password')
     def validate_password(cls, v):
         if not any(char.isdigit() for char in v):

@@ -38,7 +38,7 @@ async def get_one_client_contact_information(
     return await service.get_client_contact_information(client_contact_id)
     
 
-@router.patch("/update_client_contact_info/{client_contact_id}}", response_model=ClientContactInformationResponse)
+@router.patch("/update_client_contact_info/{client_contact_id}", response_model=ClientContactInformationResponse)
 async def update_client_contact_information(
     client_contact_id: int,
     data : ClientContactInformationUpdate,

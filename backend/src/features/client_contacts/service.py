@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
+from datetime import datetime
 from src.features.client_contacts.models import ClientContactInformation
 from src.features.client_contacts.repository import ClientContactInformationRepository
 from src.features.client_contacts.dto import ClientContactInformationCreate,ClientContactInformationUpdate
@@ -18,17 +19,18 @@ class ClientContactInformationService:
         return await self.repository.create(client_contact_information)
     
     async def get_client_contact_information(self,client_contact_id:int)->ClientContactInformation:
-        client_contact_information = self.repository.get(client_contact_id)
-        if not client_contact_id:
+        client_contact_information = await self.repository.get(client_contact_id)
+        if not client_contact_information:
             raise NotFoundException(f"Client {client_contact_id} not found")
         return client_contact_information
     
     async def update_client_contact_information(self,client_contact_id:int,data: ClientContactInformationUpdate)->ClientContactInformation:
         updated_data = data.model_dump(exclude_unset=True)
+        updated_data['updated_at'] = datetime.now()
         updated = await self.repository.update(client_contact_id,updated_data)
         if not updated:
             raise NotFoundException(f"Client {client_contact_id} not found")
-        
+
         return updated
     
     async def search_client_contact_by_name(self, name: str)->List[ClientContactInformation]:

@@ -49,6 +49,12 @@ async def login(
     user = await service.repository.get_by_username(credentials.username)
     return user
 
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+async def logout(response: Response):
+    """Logout user by clearing authentication cookie"""
+    response.delete_cookie(key="access_token")
+    return None
+
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(
     current_user: User = Depends(get_current_user)
