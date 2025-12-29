@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Calendar, Clock, User, Mail, Phone, FileText, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, User, Mail, Phone, FileText, CheckCircle, MapPin } from 'lucide-react';
 import { api } from '../services/api';
+import MapLocationPicker from '../components/MapLocationPicker';
 
 function AppointmentPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ function AppointmentPage() {
     appointment_time: '',
     service_type: '',
     notes: '',
+    location: null,
+    location_address: '',
   });
 
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
@@ -53,6 +56,8 @@ function AppointmentPage() {
         appointment_time: '',
         service_type: '',
         notes: '',
+        location: null,
+        location_address: '',
       });
     } catch (error) {
       setFormStatus({
@@ -221,8 +226,46 @@ function AppointmentPage() {
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
                     required
+                    step="300"
                   />
                 </div>
+                <p className="text-xs text-slate-500 mt-1">
+                  Use 24-hour format (e.g., 14:30 for 2:30 PM)
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
+                Service Location *
+              </label>
+              <p className="text-xs text-slate-500 mb-3">
+                Click on the map to select where you need the service
+              </p>
+              <MapLocationPicker
+                location={formData.location}
+                onChange={(location) => setFormData(prev => ({ ...prev, location }))}
+                height="350px"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="location_address" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
+                Address (Optional)
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <MapPin className="text-slate-400" size={20} />
+                </div>
+                <input
+                  type="text"
+                  id="location_address"
+                  name="location_address"
+                  value={formData.location_address}
+                  onChange={handleChange}
+                  className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
+                  placeholder="Street address, building, unit number, etc."
+                />
               </div>
             </div>
 

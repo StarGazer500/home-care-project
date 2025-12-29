@@ -59,14 +59,36 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_object=include_object,  # Add filter for system tables
     )
 
     with context.begin_transaction():
         context.run_migrations()
 
 
+def include_object(object, name, type_, reflected, compare_to):
+    """
+    Exclude PostGIS system tables from Alembic autogenerate.
+    Returns False for objects that should be ignored.
+    """
+    # Ignore PostGIS system tables and views
+    if type_ == "table" and name in [
+        'spatial_ref_sys',  # PostGIS spatial reference systems
+        'geometry_columns',  # PostGIS geometry metadata
+        'geography_columns',  # PostGIS geography metadata
+        'raster_columns',  # PostGIS raster metadata
+        'raster_overviews',  # PostGIS raster overviews
+    ]:
+        return False
+    return True
+
+
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        include_object=include_object,  # Add filter for system tables
+    )
 
     with context.begin_transaction():
         context.run_migrations()

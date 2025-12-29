@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, Loader, Plus, User, Mail, Phone, FileText } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, Loader, Plus, User, Mail, Phone, FileText, MapPin } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { api } from '../../services/api';
+import MapLocationPicker from '../../components/MapLocationPicker';
 
 function MyAppointmentsPage() {
   const { user } = useAuth();
@@ -18,6 +19,8 @@ function MyAppointmentsPage() {
     appointment_time: '',
     service_type: '',
     notes: '',
+    location: null,
+    location_address: '',
   });
 
   useEffect(() => {
@@ -76,6 +79,8 @@ function MyAppointmentsPage() {
         appointment_time: '',
         service_type: '',
         notes: '',
+        location: null,
+        location_address: '',
       });
       fetchAppointments();
     } catch (error) {
@@ -447,8 +452,45 @@ function MyAppointmentsPage() {
                       onChange={handleBookingChange}
                       className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 focus:outline-none"
                       required
+                      step="300"
                     />
                   </div>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Use 24-hour format (e.g., 14:30 for 2:30 PM)
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
+                  Service Location *
+                </label>
+                <p className="text-xs text-slate-500 mb-3">
+                  Click on the map to select the appointment location
+                </p>
+                <MapLocationPicker
+                  location={bookingForm.location}
+                  onChange={(location) => setBookingForm(prev => ({ ...prev, location }))}
+                  height="350px"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
+                  Address (Optional)
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <MapPin className="text-slate-400" size={20} />
+                  </div>
+                  <input
+                    type="text"
+                    name="location_address"
+                    value={bookingForm.location_address}
+                    onChange={handleBookingChange}
+                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 focus:outline-none"
+                    placeholder="Street address, building, unit number, etc."
+                  />
                 </div>
               </div>
 

@@ -12,6 +12,7 @@ import ContactsPage from './pages/admin/ContactsPage';
 import ContactDetailPage from './pages/admin/ContactDetailPage';
 import AppointmentsPage from './pages/admin/AppointmentsPage';
 import AppointmentDetailPage from './pages/admin/AppointmentDetailPage';
+import AppointmentsMapPage from './pages/admin/AppointmentsMapPage';
 import ClientLayout from './components/ClientLayout';
 import MyAppointmentsPage from './pages/client/MyAppointmentsPage';
 
@@ -52,6 +53,7 @@ function App() {
             <Route path="contacts/:id" element={<ContactDetailPage />} />
             <Route path="appointments" element={<AppointmentsPage />} />
             <Route path="appointments/:id" element={<AppointmentDetailPage />} />
+            <Route path="map" element={<AppointmentsMapPage />} />
           </Route>
 
           {/* 404 Catch-all Route */}

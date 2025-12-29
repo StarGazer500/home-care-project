@@ -3,15 +3,41 @@ from typing import List, Optional
 from datetime import datetime, date
 from src.features.appointments.models import Appointment
 from src.features.appointments.repository import AppointmentRepository
-from src.features.appointments.dto import AppointmentCreate, AppointmentUpdate
+from src.features.appointments.dto import AppointmentCreate, AppointmentUpdate, LocationData
 from src.core.exceptions import NotFoundException
 
 class AppointmentService:
     def __init__(self, session: AsyncSession):
         self.repository = AppointmentRepository(session)
 
+    @staticmethod
+    def location_to_wkt(location: Optional[LocationData]) -> Optional[str]:
+        """Convert LocationData to WKT (Well-Known Text) format for PostGIS"""
+        if not location:
+            return None
+        return f'SRID=4326;POINT({location.longitude} {location.latitude})'
+
+    @staticmethod
+    def wkt_to_location(wkt: Optional[str]) -> Optional[LocationData]:
+        """Convert WKT from PostGIS to LocationData"""
+        if not wkt:
+            return None
+        try:
+            # Parse WKT format: "POINT(longitude latitude)" or "SRID=4326;POINT(longitude latitude)"
+            if isinstance(wkt, str):
+                point_str = wkt.split('POINT(')[1].rstrip(')')
+                lon, lat = point_str.split()
+                return LocationData(latitude=float(lat), longitude=float(lon))
+        except (IndexError, ValueError):
+            return None
+        return None
+
     async def create_appointment(self, data: AppointmentCreate) -> Appointment:
-        appointment = Appointment(**data.model_dump())
+        appointment_data = data.model_dump(exclude={'location'})
+        # Convert location coordinates to PostGIS format
+        if data.location:
+            appointment_data['location'] = self.location_to_wkt(data.location)
+        appointment = Appointment(**appointment_data)
         return await self.repository.create(appointment)
 
     async def get_appointment(self, appointment_id: int) -> Appointment:
@@ -21,8 +47,13 @@ class AppointmentService:
         return appointment
 
     async def update_appointment(self, appointment_id: int, data: AppointmentUpdate) -> Appointment:
-        updated_data = data.model_dump(exclude_unset=True)
+        updated_data = data.model_dump(exclude_unset=True, exclude={'location'})
         updated_data['updated_at'] = datetime.now()
+        # Convert location coordinates to PostGIS format if provided
+        if 'location' in data.model_dump(exclude_unset=True) and data.location:
+            updated_data['location'] = self.location_to_wkt(data.location)
+        elif 'location' in data.model_dump(exclude_unset=True) and data.location is None:
+            updated_data['location'] = None
         updated = await self.repository.update(appointment_id, updated_data)
         if not updated:
             raise NotFoundException(f"Appointment {appointment_id} not found")

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Home, Users, Calendar, LogOut, Menu, X } from 'lucide-react';
+import { Home, Users, Calendar, Map, LogOut, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 function AdminLayout() {
@@ -23,6 +23,7 @@ function AdminLayout() {
     { path: '/admin', label: 'Dashboard', icon: Home },
     { path: '/admin/contacts', label: 'Contacts', icon: Users },
     { path: '/admin/appointments', label: 'Appointments', icon: Calendar },
+    { path: '/admin/map', label: 'Map View', icon: Map },
   ];
 
   return (

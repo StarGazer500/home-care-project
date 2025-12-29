@@ -144,6 +144,43 @@ export const api = {
       return handleResponse(response);
     },
 
+    getAllComplete: async () => {
+      // Fetch all appointments by automatically paginating through all pages
+      const allAppointments = [];
+      let skip = 0;
+      const limit = 100; // Maximum allowed by backend
+      let hasMore = true;
+
+      while (hasMore) {
+        const response = await fetch(
+          `${API_BASE_URL}/appointments/all?skip=${skip}&limit=${limit}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
+        const data = await handleResponse(response);
+
+        if (data.items && data.items.length > 0) {
+          allAppointments.push(...data.items);
+          skip += limit;
+
+          // Check if we've fetched all records
+          // If we received fewer items than the limit, or we've reached the total
+          hasMore = data.items.length === limit && allAppointments.length < data.total;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      return {
+        items: allAppointments,
+        total: allAppointments.length,
+        page: 1,
+        size: allAppointments.length
+      };
+    },
+
     getById: async (id) => {
       const response = await fetch(
         `${API_BASE_URL}/appointments/get/${id}`,

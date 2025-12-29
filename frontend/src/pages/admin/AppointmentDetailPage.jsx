@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, User, Mail, Phone, FileText, Save, X } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Mail, Phone, FileText, Save, X, MapPin } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { api } from '../../services/api';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for default marker icons
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 
 function AppointmentDetailPage() {
   const { id } = useParams();
@@ -389,6 +400,53 @@ function AppointmentDetailPage() {
               </div>
             )}
           </div>
+
+          {/* Location Map */}
+          {appointment.location && (
+            <div>
+              <label className="block text-sm font-bold mb-2 text-slate-700 flex items-center space-x-2">
+                <MapPin className="text-red-500" size={20} />
+                <span>Appointment Location</span>
+              </label>
+              <div className="rounded-xl overflow-hidden border-2 border-slate-200" style={{ height: '400px' }}>
+                <MapContainer
+                  center={[appointment.location.latitude, appointment.location.longitude]}
+                  zoom={15}
+                  style={{ height: '100%', width: '100%' }}
+                  scrollWheelZoom={false}
+                >
+                  <TileLayer
+                    attribution='&copy; Google Maps'
+                    url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+                    maxZoom={20}
+                  />
+                  <Marker position={[appointment.location.latitude, appointment.location.longitude]}>
+                    <Popup>
+                      <div className="p-2">
+                        <div className="font-bold text-slate-900 mb-2">{appointment.service_type}</div>
+                        <div className="text-sm text-slate-700">{appointment.full_name}</div>
+                        {appointment.location_address && (
+                          <div className="text-xs text-slate-600 mt-2">{appointment.location_address}</div>
+                        )}
+                        <div className="text-xs text-slate-500 mt-2">
+                          {appointment.location.latitude.toFixed(6)}°, {appointment.location.longitude.toFixed(6)}°
+                        </div>
+                      </div>
+                    </Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+              {appointment.location_address && (
+                <div className="mt-2 p-3 bg-slate-50 rounded-xl flex items-start space-x-2">
+                  <MapPin className="text-slate-400 flex-shrink-0 mt-0.5" size={16} />
+                  <span className="text-sm text-slate-700">{appointment.location_address}</span>
+                </div>
+              )}
+              <div className="mt-2 text-xs text-slate-500">
+                Coordinates: {appointment.location.latitude.toFixed(6)}°, {appointment.location.longitude.toFixed(6)}°
+              </div>
+            </div>
+          )}
 
           <div className="pt-6 border-t border-slate-200">
             <div className="grid grid-cols-2 gap-4 text-sm">
