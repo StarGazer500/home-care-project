@@ -10,6 +10,7 @@ function ContactsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(null);
 
   useEffect(() => {
     fetchContacts();
@@ -56,6 +57,24 @@ function ContactsPage() {
       setError(err.message || 'Failed to delete contact');
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleStatusChange = async (contactId, newStatus) => {
+    try {
+      setUpdatingStatus(contactId);
+      await api.clientContacts.update(contactId, { status: newStatus });
+
+      // Update local state
+      setContacts(contacts.map(contact =>
+        contact.id === contactId
+          ? { ...contact, status: newStatus }
+          : contact
+      ));
+    } catch (err) {
+      setError(err.message || 'Failed to update status');
+    } finally {
+      setUpdatingStatus(null);
     }
   };
 
@@ -159,6 +178,9 @@ function ContactsPage() {
                     Service
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider" style={{color: '#1e3a5f'}}>
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider" style={{color: '#1e3a5f'}}>
                     Submitted
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider" style={{color: '#1e3a5f'}}>
@@ -194,6 +216,23 @@ function ContactsPage() {
                       <span className="inline-block px-3 py-1 bg-cyan-50 text-cyan-700 text-xs font-medium rounded-full">
                         {contact.service_needed || 'N/A'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <select
+                        value={contact.status || 'pending'}
+                        onChange={(e) => handleStatusChange(contact.id, e.target.value)}
+                        disabled={updatingStatus === contact.id}
+                        className={`px-3 py-1 text-xs font-medium rounded-full border-0 focus:ring-2 focus:ring-offset-1 transition-all ${
+                          contact.status === 'pending' ? 'bg-yellow-100 text-yellow-800 focus:ring-yellow-300' :
+                          contact.status === 'contacted' ? 'bg-blue-100 text-blue-800 focus:ring-blue-300' :
+                          contact.status === 'cancelled' ? 'bg-red-100 text-red-800 focus:ring-red-300' :
+                          'bg-gray-100 text-gray-800 focus:ring-gray-300'
+                        } ${updatingStatus === contact.id ? 'opacity-50 cursor-wait' : 'cursor-pointer'}`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-2 text-sm text-slate-600">

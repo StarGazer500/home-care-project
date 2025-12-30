@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, User, Mail, Phone, FileText, Save, X, MapPin } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import MapLocationPicker from '../../components/MapLocationPicker';
 import { api } from '../../services/api';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -31,6 +32,8 @@ function AppointmentDetailPage() {
     service_type: '',
     notes: '',
     status: '',
+    location: null,
+    location_address: '',
   });
 
   const serviceTypes = [
@@ -62,6 +65,8 @@ function AppointmentDetailPage() {
         service_type: data.service_type,
         notes: data.notes || '',
         status: data.status,
+        location: data.location || null,
+        location_address: data.location_address || '',
       });
     } catch (error) {
       console.error('Failed to fetch appointment:', error);
@@ -104,8 +109,24 @@ function AppointmentDetailPage() {
       service_type: appointment.service_type,
       notes: appointment.notes || '',
       status: appointment.status,
+      location: appointment.location || null,
+      location_address: appointment.location_address || '',
     });
     setIsEditing(false);
+  };
+
+  const handleLocationChange = (newLocation) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: newLocation,
+    }));
+  };
+
+  const handleLocationAddressChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      location_address: e.target.value,
+    }));
   };
 
   const getStatusBadge = (status) => {
@@ -402,51 +423,88 @@ function AppointmentDetailPage() {
           </div>
 
           {/* Location Map */}
-          {appointment.location && (
-            <div>
-              <label className="block text-sm font-bold mb-2 text-slate-700 flex items-center space-x-2">
-                <MapPin className="text-red-500" size={20} />
-                <span>Appointment Location</span>
-              </label>
-              <div className="rounded-xl overflow-hidden border-2 border-slate-200" style={{ height: '400px' }}>
-                <MapContainer
-                  center={[appointment.location.latitude, appointment.location.longitude]}
-                  zoom={15}
-                  style={{ height: '100%', width: '100%' }}
-                  scrollWheelZoom={false}
-                >
-                  <TileLayer
-                    attribution='&copy; Google Maps'
-                    url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
-                    maxZoom={20}
-                  />
-                  <Marker position={[appointment.location.latitude, appointment.location.longitude]}>
-                    <Popup>
-                      <div className="p-2">
-                        <div className="font-bold text-slate-900 mb-2">{appointment.service_type}</div>
-                        <div className="text-sm text-slate-700">{appointment.full_name}</div>
-                        {appointment.location_address && (
-                          <div className="text-xs text-slate-600 mt-2">{appointment.location_address}</div>
-                        )}
-                        <div className="text-xs text-slate-500 mt-2">
-                          {appointment.location.latitude.toFixed(6)}°, {appointment.location.longitude.toFixed(6)}°
-                        </div>
-                      </div>
-                    </Popup>
-                  </Marker>
-                </MapContainer>
-              </div>
-              {appointment.location_address && (
-                <div className="mt-2 p-3 bg-slate-50 rounded-xl flex items-start space-x-2">
-                  <MapPin className="text-slate-400 flex-shrink-0 mt-0.5" size={16} />
-                  <span className="text-sm text-slate-700">{appointment.location_address}</span>
-                </div>
+          <div>
+            <label className="block text-sm font-bold mb-2 text-slate-700 flex items-center space-x-2">
+              <MapPin className="text-red-500" size={20} />
+              <span>Appointment Location</span>
+              {!isEditing && !appointment.location && (
+                <span className="text-xs font-normal text-slate-500">(Not set)</span>
               )}
-              <div className="mt-2 text-xs text-slate-500">
-                Coordinates: {appointment.location.latitude.toFixed(6)}°, {appointment.location.longitude.toFixed(6)}°
+            </label>
+
+            {isEditing ? (
+              <div className="space-y-3">
+                <div className="rounded-xl overflow-hidden border-2 border-slate-200">
+                  <MapLocationPicker
+                    location={formData.location}
+                    onChange={handleLocationChange}
+                    height="400px"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-slate-700">
+                    Location Address (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.location_address}
+                    onChange={handleLocationAddressChange}
+                    placeholder="Enter the address for this location"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 focus:outline-none"
+                  />
+                  <p className="text-xs text-slate-500 mt-1">
+                    Click on the map to set or change the location, or use "Use My Location" button
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            ) : appointment.location ? (
+              <div>
+                <div className="rounded-xl overflow-hidden border-2 border-slate-200" style={{ height: '400px' }}>
+                  <MapContainer
+                    center={[appointment.location.latitude, appointment.location.longitude]}
+                    zoom={15}
+                    style={{ height: '100%', width: '100%' }}
+                    scrollWheelZoom={false}
+                  >
+                    <TileLayer
+                      attribution='&copy; Google Maps'
+                      url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+                      maxZoom={20}
+                    />
+                    <Marker position={[appointment.location.latitude, appointment.location.longitude]}>
+                      <Popup>
+                        <div className="p-2">
+                          <div className="font-bold text-slate-900 mb-2">{appointment.service_type}</div>
+                          <div className="text-sm text-slate-700">{appointment.full_name}</div>
+                          {appointment.location_address && (
+                            <div className="text-xs text-slate-600 mt-2">{appointment.location_address}</div>
+                          )}
+                          <div className="text-xs text-slate-500 mt-2">
+                            {appointment.location.latitude.toFixed(6)}°, {appointment.location.longitude.toFixed(6)}°
+                          </div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  </MapContainer>
+                </div>
+                {appointment.location_address && (
+                  <div className="mt-2 p-3 bg-slate-50 rounded-xl flex items-start space-x-2">
+                    <MapPin className="text-slate-400 flex-shrink-0 mt-0.5" size={16} />
+                    <span className="text-sm text-slate-700">{appointment.location_address}</span>
+                  </div>
+                )}
+                <div className="mt-2 text-xs text-slate-500">
+                  Coordinates: {appointment.location.latitude.toFixed(6)}°, {appointment.location.longitude.toFixed(6)}°
+                </div>
+              </div>
+            ) : (
+              <div className="p-8 bg-slate-50 rounded-xl text-center border-2 border-dashed border-slate-200">
+                <MapPin className="mx-auto text-slate-400 mb-2" size={32} />
+                <p className="text-slate-600">No location set for this appointment</p>
+                <p className="text-xs text-slate-500 mt-1">Click "Edit Appointment" to add a location</p>
+              </div>
+            )}
+          </div>
 
           <div className="pt-6 border-t border-slate-200">
             <div className="grid grid-cols-2 gap-4 text-sm">

@@ -12,5 +12,6 @@ class ClientContactInformation(SQLModel,table=True):
     phone: Optional[str] = Field(default=None, max_length=20)
     service_needed: Optional[str] = Field(default=None, max_length=100)
     message: Optional[str] = Field(default=None, max_length=1000)
+    status: str = Field(default="pending", max_length=50)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)

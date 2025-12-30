@@ -8,6 +8,7 @@ class ClientContactInformationBase(BaseModel):
     phone: Optional[str] = None
     service_needed: Optional[str] = None
     message: Optional[str] = None
+    status: Optional[str] = "pending"
 
 class ClientContactInformationCreate(ClientContactInformationBase):
     pass
@@ -18,6 +19,7 @@ class ClientContactInformationUpdate(BaseModel):
     phone: Optional[str] = None
     service_needed: Optional[str] = None
     message: Optional[str] = None
+    status: Optional[str] = None
 
 
 class ClientContactInformationResponse(ClientContactInformationBase):

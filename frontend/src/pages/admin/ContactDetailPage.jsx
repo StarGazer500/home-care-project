@@ -58,7 +58,8 @@ function ContactDetailPage() {
         email: formData.email,
         phone: formData.phone,
         service_needed: formData.service_needed,
-        message: formData.message
+        message: formData.message,
+        status: formData.status
       });
       setContact(updated);
       setFormData(updated);
@@ -259,6 +260,36 @@ function ContactDetailPage() {
               ) : (
                 <div className="inline-block px-4 py-2 bg-cyan-50 text-cyan-700 text-lg font-medium rounded-full">
                   {contact.service_needed || 'Not specified'}
+                </div>
+              )}
+            </div>
+
+            {/* Status */}
+            <div>
+              <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
+                Contact Status
+              </label>
+              {isEditing ? (
+                <select
+                  name="status"
+                  value={formData.status || 'pending'}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              ) : (
+                <div className="inline-flex items-center">
+                  <span className={`px-4 py-2 text-lg font-medium rounded-full ${
+                    contact.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                    contact.status === 'contacted' ? 'bg-blue-100 text-blue-800' :
+                    contact.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {contact.status ? contact.status.charAt(0).toUpperCase() + contact.status.slice(1) : 'Pending'}
+                  </span>
                 </div>
               )}
             </div>
