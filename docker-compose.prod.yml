@@ -1,22 +1,22 @@
-backend:
+version: '3.8'
+
+services:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.prod
     env_file:
       - ./backend/.env
-    
     expose:
       - "8000"
     restart: unless-stopped
-   
-   
-  # NGINX Proxy Server Service
-nginx:
-  image: nginx:latest
-  volumes:
-    - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf
-  ports:
-    - "80:80"
-  depends_on:
-    - backend
-  restart: always
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
