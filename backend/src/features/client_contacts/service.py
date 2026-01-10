@@ -30,7 +30,6 @@ class ClientContactInformationService:
         updated = await self.repository.update(client_contact_id,updated_data)
         if not updated:
             raise NotFoundException(f"Client {client_contact_id} not found")
-
         return updated
     
     async def search_client_contact_by_name(self, name: str)->List[ClientContactInformation]:
