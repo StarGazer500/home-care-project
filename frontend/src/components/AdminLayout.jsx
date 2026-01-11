@@ -23,7 +23,7 @@ function AdminLayout() {
     { path: '/admin', label: 'Dashboard', icon: Home },
     { path: '/admin/contacts', label: 'Contacts', icon: Users },
     { path: '/admin/appointments', label: 'Appointments', icon: Calendar },
-    { path: '/admin/map', label: 'Map View', icon: Map },
+    // { path: '/admin/map', label: 'Map View', icon: Map },
   ];
 
   return (
