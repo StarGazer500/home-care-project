@@ -35,19 +35,23 @@ class AccountService:
     
     async def authenticate(self, credentials: UserLogin) -> str:
         """Authenticate user and return JWT token"""
-        # Get user
+        # Get user by username or email
         user = await self.repository.get_by_username(credentials.username)
-        
+
+        # If not found by username, try email
+        if not user:
+            user = await self.repository.get_by_email(credentials.username)
+
         if not user:
             raise UnauthorizedException("Invalid username or password")
-        
+
         # Verify password
         if not verify_password(credentials.password, user.hashed_password):
             raise UnauthorizedException("Invalid username or password")
-        
+
         # Check if active
-       
-        
+
+
         # Create access token
         access_token = create_access_token(data={"sub": user.id})
         return access_token
