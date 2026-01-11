@@ -15,6 +15,9 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf
+      - ./frontend/dist/index.html:/usr/share/nginx/html/index.html:ro
+      - ./frontend/logo.jpeg:/usr/share/nginx/html/logo.jpeg:ro
+      - ./frontend/heart-icon.svg:/usr/share/nginx/html/heart-icon.svg:ro
     ports:
       - "80:80"
     depends_on:
