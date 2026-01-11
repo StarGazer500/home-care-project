@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import Optional, List
 from datetime import date
 from src.features.appointments.models import Appointment
@@ -42,3 +42,11 @@ class AppointmentRepository(BaseRepository[Appointment]):
         ).offset(skip).limit(limit).order_by(Appointment.created_at.desc())
         result = await self.session.execute(statement)
         return result.scalars().all()
+
+    async def count_by_user(self, user_id: int) -> int:
+        """Count total appointments for a specific user"""
+        statement = select(func.count()).select_from(Appointment).where(
+            Appointment.user_id == user_id
+        )
+        result = await self.session.execute(statement)
+        return result.scalar_one()

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, Loader, Plus, User, Mail, Phone, FileText, MapPin } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, Loader, Plus, User, Mail, Phone, FileText, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { api } from '../../services/api';
 import MapLocationPicker from '../../components/MapLocationPicker';
@@ -11,6 +11,9 @@ function MyAppointmentsPage() {
   const [filter, setFilter] = useState('all');
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const itemsPerPage = 10; // Adjust based on screen size
   const [bookingForm, setBookingForm] = useState({
     full_name: user?.full_name || '',
     email: user?.email || '',
@@ -25,7 +28,7 @@ function MyAppointmentsPage() {
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     if (user) {
@@ -39,10 +42,12 @@ function MyAppointmentsPage() {
   }, [user]);
 
   const fetchAppointments = async () => {
+    setLoading(true);
     try {
-      // Use user-specific endpoint instead of filtering all appointments
-      const data = await api.appointments.getMyAppointments(0, 100);
+      const skip = (currentPage - 1) * itemsPerPage;
+      const data = await api.appointments.getMyAppointments(skip, itemsPerPage);
       setAppointments(data.items || []);
+      setTotalCount(data.total || 0);
     } catch (error) {
       console.error('Failed to fetch appointments:', error);
     } finally {
@@ -76,6 +81,7 @@ function MyAppointmentsPage() {
         location: null,
         location_address: '',
       });
+      setCurrentPage(1);
       fetchAppointments();
     } catch (error) {
       console.error('Failed to book appointment:', error);
@@ -83,6 +89,11 @@ function MyAppointmentsPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const getFilteredAppointments = () => {
@@ -156,6 +167,23 @@ function MyAppointmentsPage() {
     'Companionship',
     'Other',
   ];
+
+  // Generate time slots from 8 AM to 8 PM in 30-minute intervals
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let hour = 8; hour <= 20; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time24 = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        const hour12 = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const time12 = `${hour12}:${minute.toString().padStart(2, '0')} ${period}`;
+        slots.push({ value: time24, label: time12 });
+      }
+    }
+    return slots;
+  };
+
+  const timeSlots = generateTimeSlots();
 
   return (
     <div className="space-y-6">
@@ -255,63 +283,124 @@ function MyAppointmentsPage() {
           </a>
         </div>
       ) : (
-        <div className="grid gap-6">
-          {filteredAppointments.map((appointment) => (
-            <div
-              key={appointment.id}
-              className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-900">
-                        {appointment.service_type}
-                      </h3>
-                      <p className="text-sm text-slate-600">
-                        Appointment ID: #{appointment.id}
-                      </p>
-                    </div>
-                    {getStatusBadge(appointment.status)}
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                        <Calendar className="text-red-500" size={20} />
-                      </div>
+        <>
+          <div className="grid gap-6">
+            {filteredAppointments.map((appointment) => (
+              <div
+                key={appointment.id}
+                className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1 space-y-3">
+                    <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-xs text-slate-500">Date</p>
-                        <p className="text-sm font-medium text-slate-900">
-                          {formatDate(appointment.appointment_date)}
+                        <h3 className="text-lg font-semibold text-slate-900">
+                          {appointment.service_type}
+                        </h3>
+                        <p className="text-sm text-slate-600">
+                          Appointment ID: #{appointment.id}
                         </p>
                       </div>
+                      {getStatusBadge(appointment.status)}
                     </div>
 
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Clock className="text-blue-500" size={20} />
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                          <Calendar className="text-red-500" size={20} />
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Date</p>
+                          <p className="text-sm font-medium text-slate-900">
+                            {formatDate(appointment.appointment_date)}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-xs text-slate-500">Time</p>
-                        <p className="text-sm font-medium text-slate-900">
-                          {formatTime(appointment.appointment_time)}
-                        </p>
+
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Clock className="text-blue-500" size={20} />
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Time</p>
+                          <p className="text-sm font-medium text-slate-900">
+                            {formatTime(appointment.appointment_time)}
+                          </p>
+                        </div>
                       </div>
                     </div>
+
+                    {appointment.notes && (
+                      <div className="pt-3 border-t border-slate-200">
+                        <p className="text-xs text-slate-500 mb-1">Notes:</p>
+                        <p className="text-sm text-slate-700">{appointment.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          {totalCount > itemsPerPage && (
+            <div className="bg-white rounded-2xl shadow-sm p-6">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-sm text-slate-600">
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount} appointments
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 border-2 border-slate-200 hover:border-red-500 hover:bg-red-50 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
+                  >
+                    <ChevronLeft size={20} />
+                    <span className="hidden sm:inline">Previous</span>
+                  </button>
+
+                  <div className="flex items-center space-x-1">
+                    {Array.from({ length: Math.ceil(totalCount / itemsPerPage) }, (_, i) => i + 1)
+                      .filter(page => {
+                        // Show first page, last page, current page, and 2 pages around current
+                        const totalPages = Math.ceil(totalCount / itemsPerPage);
+                        return page === 1 ||
+                               page === totalPages ||
+                               (page >= currentPage - 1 && page <= currentPage + 1);
+                      })
+                      .map((page, index, array) => (
+                        <div key={page} className="flex items-center">
+                          {index > 0 && array[index - 1] !== page - 1 && (
+                            <span className="px-2 text-slate-400">...</span>
+                          )}
+                          <button
+                            onClick={() => handlePageChange(page)}
+                            className={`w-10 h-10 rounded-xl font-medium transition-colors ${
+                              currentPage === page
+                                ? 'bg-red-500 text-white'
+                                : 'text-slate-600 hover:bg-slate-100 border-2 border-transparent hover:border-slate-200'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        </div>
+                      ))
+                    }
                   </div>
 
-                  {appointment.notes && (
-                    <div className="pt-3 border-t border-slate-200">
-                      <p className="text-xs text-slate-500 mb-1">Notes:</p>
-                      <p className="text-sm text-slate-700">{appointment.notes}</p>
-                    </div>
-                  )}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage >= Math.ceil(totalCount / itemsPerPage)}
+                    className="px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 border-2 border-slate-200 hover:border-red-500 hover:bg-red-50 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
+                  >
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight size={20} />
+                  </button>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
 
       {/* Booking Modal */}
@@ -439,18 +528,28 @@ function MyAppointmentsPage() {
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <Clock className="text-slate-400" size={20} />
                     </div>
-                    <input
-                      type="time"
+                    <select
                       name="appointment_time"
                       value={bookingForm.appointment_time}
                       onChange={handleBookingChange}
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 focus:outline-none"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 focus:outline-none appearance-none cursor-pointer"
                       required
-                      step="300"
-                    />
+                    >
+                      <option value="">Select a time</option>
+                      {timeSlots.map((slot) => (
+                        <option key={slot.value} value={slot.value}>
+                          {slot.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                      <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    Use 24-hour format (e.g., 14:30 for 2:30 PM)
+                    Available times: 8:00 AM - 8:00 PM
                   </p>
                 </div>
               </div>

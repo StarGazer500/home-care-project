@@ -80,3 +80,7 @@ class AppointmentService:
     async def get_user_appointments(self, user_id: int, skip: int = 0, limit: int = 100) -> List[Appointment]:
         """Get all appointments for a specific user"""
         return await self.repository.get_by_user(user_id, skip, limit)
+
+    async def count_user_appointments(self, user_id: int) -> int:
+        """Count total appointments for a specific user"""
+        return await self.repository.count_by_user(user_id)

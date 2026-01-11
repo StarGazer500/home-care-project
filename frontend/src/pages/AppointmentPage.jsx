@@ -47,6 +47,23 @@ function AppointmentPage() {
     'Other',
   ];
 
+  // Generate time slots from 8 AM to 8 PM in 30-minute intervals
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let hour = 8; hour <= 20; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time24 = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        const hour12 = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const time12 = `${hour12}:${minute.toString().padStart(2, '0')} ${period}`;
+        slots.push({ value: time24, label: time12 });
+      }
+    }
+    return slots;
+  };
+
+  const timeSlots = generateTimeSlots();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -268,19 +285,29 @@ function AppointmentPage() {
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Clock className="text-slate-400" size={20} />
                   </div>
-                  <input
-                    type="time"
+                  <select
                     id="appointment_time"
                     name="appointment_time"
                     value={formData.appointment_time}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
+                    className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors appearance-none cursor-pointer"
                     required
-                    step="300"
-                  />
+                  >
+                    <option value="">Select a time</option>
+                    {timeSlots.map((slot) => (
+                      <option key={slot.value} value={slot.value}>
+                        {slot.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
                 </div>
                 <p className="text-xs text-slate-500 mt-1">
-                  Use 24-hour format (e.g., 14:30 for 2:30 PM)
+                  Available times: 8:00 AM - 8:00 PM
                 </p>
               </div>
             </div>

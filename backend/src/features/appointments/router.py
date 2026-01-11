@@ -146,7 +146,7 @@ async def get_my_appointments(
 ):
     """Get current user's appointments (requires authentication)"""
     appointments = await service.get_user_appointments(current_user.id, skip, limit)
-    total = len(appointments)
+    total = await service.count_user_appointments(current_user.id)
 
     return AppointmentList(
         items=[serialize_appointment(apt) for apt in appointments],

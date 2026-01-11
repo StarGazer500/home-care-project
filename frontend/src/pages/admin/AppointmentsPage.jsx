@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Mail, Phone, Search, Trash2, Eye, Filter } from 'lucide-react';
+import { Calendar, Clock, User, Mail, Phone, Search, Trash2, Eye, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,22 +9,28 @@ function AppointmentsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const itemsPerPage = 15;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     filterAppointments();
   }, [appointments, searchQuery, statusFilter]);
 
   const fetchAppointments = async () => {
+    setLoading(true);
     try {
-      const data = await api.appointments.getAll(0, 100);
+      const skip = (currentPage - 1) * itemsPerPage;
+      const data = await api.appointments.getAll(skip, itemsPerPage);
       const appointmentsList = data.items || [];
       setAppointments(appointmentsList);
       setFilteredAppointments(appointmentsList);
+      setTotalCount(data.total || 0);
     } catch (error) {
       console.error('Failed to fetch appointments:', error);
     } finally {
@@ -49,6 +55,11 @@ function AppointmentsPage() {
     }
 
     setFilteredAppointments(filtered);
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id) => {
@@ -290,6 +301,64 @@ function AppointmentsPage() {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {totalCount > itemsPerPage && (
+            <div className="px-6 py-4 border-t border-slate-200">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-sm text-slate-600">
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount} appointments
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 border-2 border-slate-200 hover:border-red-500 hover:bg-red-50 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
+                  >
+                    <ChevronLeft size={20} />
+                    <span className="hidden sm:inline">Previous</span>
+                  </button>
+
+                  <div className="flex items-center space-x-1">
+                    {Array.from({ length: Math.ceil(totalCount / itemsPerPage) }, (_, i) => i + 1)
+                      .filter(page => {
+                        const totalPages = Math.ceil(totalCount / itemsPerPage);
+                        return page === 1 ||
+                               page === totalPages ||
+                               (page >= currentPage - 1 && page <= currentPage + 1);
+                      })
+                      .map((page, index, array) => (
+                        <div key={page} className="flex items-center">
+                          {index > 0 && array[index - 1] !== page - 1 && (
+                            <span className="px-2 text-slate-400">...</span>
+                          )}
+                          <button
+                            onClick={() => handlePageChange(page)}
+                            className={`w-10 h-10 rounded-xl font-medium transition-colors ${
+                              currentPage === page
+                                ? 'bg-red-500 text-white'
+                                : 'text-slate-600 hover:bg-slate-100 border-2 border-transparent hover:border-slate-200'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        </div>
+                      ))
+                    }
+                  </div>
+
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage >= Math.ceil(totalCount / itemsPerPage)}
+                    className="px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 border-2 border-slate-200 hover:border-red-500 hover:bg-red-50 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
+                  >
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
