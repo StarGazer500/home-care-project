@@ -34,3 +34,11 @@ class AppointmentRepository(BaseRepository[Appointment]):
         )
         result = await self.session.execute(statement)
         return result.scalars().all()
+
+    async def get_by_user(self, user_id: int, skip: int = 0, limit: int = 100) -> List[Appointment]:
+        """Get appointments for a specific user"""
+        statement = select(Appointment).where(
+            Appointment.user_id == user_id
+        ).offset(skip).limit(limit).order_by(Appointment.created_at.desc())
+        result = await self.session.execute(statement)
+        return result.scalars().all()

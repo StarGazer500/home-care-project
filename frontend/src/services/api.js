@@ -250,6 +250,17 @@ export const api = {
       );
       return handleResponse(response);
     },
+
+    getMyAppointments: async (skip = 0, limit = 100) => {
+      const response = await fetch(
+        `${API_BASE_URL}/appointments/my-appointments?skip=${skip}&limit=${limit}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
   },
 
   // Auth API

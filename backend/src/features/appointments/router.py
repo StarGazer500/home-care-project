@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 from datetime import date
 from geoalchemy2.shape import to_shape
 from shapely.geometry import Point
 
 from src.core.database import get_session
+from src.core.security import get_current_user, get_current_user_optional
+from src.features.accounts.models import User
 from src.features.appointments.service import AppointmentService
 from src.features.appointments.dto import (
     AppointmentCreate,
@@ -56,9 +58,11 @@ def serialize_appointment(appointment: Appointment) -> dict:
 async def create_appointment(
     data: AppointmentCreate,
     service: AppointmentService = Depends(get_appointment_service),
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
-    """Create a new appointment"""
-    appointment = await service.create_appointment(data)
+    """Create appointment (associates with user if logged in)"""
+    user_id = current_user.id if current_user else None
+    appointment = await service.create_appointment(data, user_id=user_id)
     return serialize_appointment(appointment)
 
 @router.get("/get/{appointment_id}", response_model=AppointmentResponse)
@@ -132,3 +136,21 @@ async def search_appointments(
     """Search appointments by name"""
     appointments = await service.search_appointments_by_name(name)
     return [serialize_appointment(apt) for apt in appointments]
+
+@router.get("/my-appointments", response_model=AppointmentList)
+async def get_my_appointments(
+    current_user: User = Depends(get_current_user),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=100),
+    service: AppointmentService = Depends(get_appointment_service)
+):
+    """Get current user's appointments (requires authentication)"""
+    appointments = await service.get_user_appointments(current_user.id, skip, limit)
+    total = len(appointments)
+
+    return AppointmentList(
+        items=[serialize_appointment(apt) for apt in appointments],
+        total=total,
+        page=skip // limit + 1,
+        size=limit
+    )

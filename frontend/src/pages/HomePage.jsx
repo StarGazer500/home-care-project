@@ -8,6 +8,7 @@ function HomePage() {
   const [activeService, setActiveService] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState({});
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
   const observerRef = useRef(null);
 
   // Contact form state
@@ -22,7 +23,11 @@ function HomePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      // Show floating button after scrolling down 300px on mobile
+      setShowFloatingButton(window.scrollY > 300);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -699,6 +704,18 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Floating Book Appointment Button (Mobile Only) */}
+      {showFloatingButton && (
+        <Link
+          to="/appointments"
+          className="md:hidden fixed bottom-6 right-6 z-40 flex items-center space-x-2 px-6 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all font-bold animate-bounce"
+          style={{ animation: 'bounce 2s infinite' }}
+        >
+          <Calendar size={20} />
+          <span>Book Now</span>
+        </Link>
+      )}
 
       {/* Footer */}
       <footer className="bg-gradient-to-br from-slate-800 to-slate-900 text-slate-300 py-12 px-4 sm:px-6 lg:px-8">

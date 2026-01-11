@@ -40,15 +40,9 @@ function MyAppointmentsPage() {
 
   const fetchAppointments = async () => {
     try {
-      const data = await api.appointments.getAll(0, 100);
-      const allAppointments = data.items || [];
-
-      // Filter appointments by user email
-      const userAppointments = allAppointments.filter(
-        (appointment) => appointment.email === user?.email
-      );
-
-      setAppointments(userAppointments);
+      // Use user-specific endpoint instead of filtering all appointments
+      const data = await api.appointments.getMyAppointments(0, 100);
+      setAppointments(data.items || []);
     } catch (error) {
       console.error('Failed to fetch appointments:', error);
     } finally {

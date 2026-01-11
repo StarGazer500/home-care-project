@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.config import settings
 from src.core.database import get_session
 from src.features.accounts.repository import UserRepository
+from src.features.accounts.models import User
 
 # OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
@@ -94,6 +95,16 @@ async def get_current_user(
         raise credentials_exception
     
     return user
+
+async def get_current_user_optional(
+    request: Request,
+    session: AsyncSession = Depends(get_session)
+) -> Optional[User]:
+    """Get current user if authenticated, None otherwise (doesn't raise exception)"""
+    try:
+        return await get_current_user(request, session)
+    except HTTPException:
+        return None
 
 def require_role(required_role: str):
     """Dependency to require specific role"""

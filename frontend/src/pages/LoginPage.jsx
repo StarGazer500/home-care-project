@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Lock, Mail, AlertCircle } from 'lucide-react';
+import { Lock, Mail, AlertCircle, Info } from 'lucide-react';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -10,6 +10,11 @@ function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get redirect message and path from navigation state
+  const redirectMessage = location.state?.message;
+  const redirectFrom = location.state?.from;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +23,11 @@ function LoginPage() {
 
     try {
       const userData = await login(username, password);
-      // Redirect based on user role
-      if (userData.role === 'admin') {
+
+      // Redirect to where user came from, or default location based on role
+      if (redirectFrom) {
+        navigate(redirectFrom);
+      } else if (userData.role === 'admin') {
         navigate('/admin');
       } else {
         navigate('/dashboard/appointments');
@@ -56,6 +64,14 @@ function LoginPage() {
         {/* Login Form */}
         <div className="bg-white rounded-3xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Show redirect message if coming from another page */}
+            {redirectMessage && (
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 flex items-start space-x-3">
+                <Info className="text-blue-500 flex-shrink-0 mt-0.5" size={20} />
+                <div className="text-sm text-blue-800">{redirectMessage}</div>
+              </div>
+            )}
+
             {error && (
               <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 flex items-start space-x-3">
                 <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />

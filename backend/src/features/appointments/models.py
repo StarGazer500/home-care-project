@@ -1,12 +1,17 @@
-from sqlmodel import SQLModel, Field, Column
+from sqlmodel import SQLModel, Field, Column, Relationship
+from sqlalchemy import ForeignKey
 from geoalchemy2 import Geometry
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from datetime import datetime, date, time
+
+if TYPE_CHECKING:
+    from src.features.accounts.models import User
 
 class Appointment(SQLModel, table=True):
     __tablename__ = "appointments"
 
     id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: Optional[int] = Field(default=None, sa_column=Column(ForeignKey("users.id", ondelete="SET NULL")))
     full_name: str = Field(max_length=100)
     email: str = Field(max_length=100)
     phone: str = Field(max_length=20)
@@ -25,3 +30,6 @@ class Appointment(SQLModel, table=True):
 
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+
+    # Relationship
+    user: Optional["User"] = Relationship(back_populates="appointments")

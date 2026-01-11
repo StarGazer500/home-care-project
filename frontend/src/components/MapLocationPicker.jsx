@@ -80,7 +80,8 @@ function MapLocationPicker({ location, onChange, height = '300px' }) {
         longitude: position.lng,
       });
     }
-  }, [position, onChange, isInitialized]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [position, isInitialized]);
 
   const handleGetCurrentLocation = () => {
     if (!navigator.geolocation) {
