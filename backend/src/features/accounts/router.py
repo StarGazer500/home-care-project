@@ -46,7 +46,11 @@ async def login(
         max_age=1800,   # 30 minutes (match your JWT expiration)
     )
 
+    # Get user by username or email (same logic as authenticate)
     user = await service.repository.get_by_username(credentials.username)
+    if not user:
+        user = await service.repository.get_by_email(credentials.username)
+
     return user
 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
