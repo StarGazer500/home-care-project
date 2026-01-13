@@ -10,6 +10,8 @@ services:
     expose:
       - "8000"
     restart: unless-stopped
+    networks:
+      - app-network
 
   nginx:
     image: nginx:latest
@@ -18,8 +20,36 @@ services:
       - ./frontend/dist/index.html:/usr/share/nginx/html/index.html:ro
       - ./frontend/logo.jpeg:/usr/share/nginx/html/logo.jpeg:ro
       - ./frontend/heart-icon.svg:/usr/share/nginx/html/heart-icon.svg:ro
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     depends_on:
       - backend
     restart: always
+    networks:
+      - app-network
+
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: always
+    ports:
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS
+      - "81:81"      # Admin interface
+    environment:
+      DB_SQLITE_FILE: "/data/database.sqlite"
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+    depends_on:
+      - nginx
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  npm_data:
+  npm_letsencrypt:
