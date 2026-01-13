@@ -19,7 +19,13 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # CORS
-    ALLOWED_ORIGINS: list[str] = ["http://localhost:5173"]
+    ALLOWED_ORIGINS: list[str] = [
+        "http://localhost:5173",  # Local development
+        "http://bridgehoito.fi",
+        "https://bridgehoito.fi",
+        "http://www.bridgehoito.fi",
+        "https://www.bridgehoito.fi"
+    ]
     
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
