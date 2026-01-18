@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Lock, Mail, AlertCircle, Info } from 'lucide-react';
+import LanguageSelector from '../components/LanguageSelector';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -9,6 +11,7 @@ function LoginPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,6 +44,11 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4">
+        <LanguageSelector variant="compact" />
+      </div>
+
       <div className="max-w-md w-full space-y-8">
         {/* Logo and Header */}
         <div className="text-center">
@@ -54,10 +62,10 @@ function LoginPage() {
             </div>
           </div>
           <h2 className="font-display text-3xl font-bold text-navy-900 mb-2" style={{color: '#1e3a5f'}}>
-            Welcome Back
+            {t('auth.welcomeBack')}
           </h2>
           <p className="text-slate-600">
-            Sign in to access your dashboard
+            {t('auth.loginSubtitle')}
           </p>
         </div>
 
@@ -81,7 +89,7 @@ function LoginPage() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Email or Username
+                {t('auth.email')} / {t('auth.username')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -93,7 +101,6 @@ function LoginPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
-                  placeholder="admin or admin@bridgehoito.fi"
                   required
                   autoComplete="username"
                 />
@@ -102,7 +109,7 @@ function LoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -126,7 +133,7 @@ function LoginPage() {
               disabled={isLoading}
               className="w-full px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:shadow-xl transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? t('common.loading') : t('auth.signIn')}
             </button>
           </form>
         </div>
@@ -134,9 +141,9 @@ function LoginPage() {
         {/* Register Link */}
         <div className="text-center">
           <p className="text-sm text-slate-600">
-            Don't have an account?{' '}
+            {t('auth.noAccount')}{' '}
             <Link to="/register" className="text-red-500 font-semibold hover:text-red-600">
-              Sign up
+              {t('auth.signUp')}
             </Link>
           </p>
         </div>
@@ -147,7 +154,7 @@ function LoginPage() {
             to="/"
             className="text-sm text-slate-600 hover:text-red-500 transition-colors font-medium"
           >
-            ← Back to Homepage
+            ← {t('nav.home')}
           </Link>
         </div>
       </div>

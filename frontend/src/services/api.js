@@ -308,6 +308,60 @@ export const api = {
       return handleResponse(response);
     },
   },
+
+  // Users API (Admin only)
+  users: {
+    getAll: async (skip = 0, limit = 15) => {
+      const response = await fetch(
+        `${API_BASE_URL}/auth/users?skip=${skip}&limit=${limit}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    getOne: async (id) => {
+      const response = await fetch(
+        `${API_BASE_URL}/auth/users/${id}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    delete: async (id) => {
+      const response = await fetch(
+        `${API_BASE_URL}/auth/users/${id}`,
+        {
+          method: 'DELETE',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    searchByName: async (name) => {
+      const response = await fetch(
+        `${API_BASE_URL}/auth/users?skip=0&limit=100`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      const data = await handleResponse(response);
+      // Client-side filtering since we don't have a search endpoint
+      const filtered = data.items.filter(user =>
+        user.full_name?.toLowerCase().includes(name.toLowerCase()) ||
+        user.username?.toLowerCase().includes(name.toLowerCase()) ||
+        user.email?.toLowerCase().includes(name.toLowerCase())
+      );
+      return { ...data, items: filtered, total: filtered.length };
+    },
+  },
 };
 
 export { ApiError };

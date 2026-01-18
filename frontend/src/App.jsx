@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -12,6 +13,7 @@ import ContactsPage from './pages/admin/ContactsPage';
 import ContactDetailPage from './pages/admin/ContactDetailPage';
 import AppointmentsPage from './pages/admin/AppointmentsPage';
 import AppointmentDetailPage from './pages/admin/AppointmentDetailPage';
+import UsersPage from './pages/admin/UsersPage';
 // import AppointmentsMapPage from './pages/admin/AppointmentsMapPage';
 import ClientLayout from './components/ClientLayout';
 import MyAppointmentsPage from './pages/client/MyAppointmentsPage';
@@ -19,6 +21,7 @@ import MyAppointmentsPage from './pages/client/MyAppointmentsPage';
 function App() {
   return (
     <Router>
+      <LanguageProvider>
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
@@ -53,6 +56,7 @@ function App() {
             <Route path="contacts/:id" element={<ContactDetailPage />} />
             <Route path="appointments" element={<AppointmentsPage />} />
             <Route path="appointments/:id" element={<AppointmentDetailPage />} />
+            <Route path="users" element={<UsersPage />} />
             {/* <Route path="map" element={<AppointmentsMapPage />} /> */}
           </Route>
 
@@ -60,6 +64,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AuthProvider>
+      </LanguageProvider>
     </Router>
   );
 }

@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Calendar, LogOut, Menu, X, Home as HomeIcon } from 'lucide-react';
-import { useState } from 'react';
+import LanguageSelector from './LanguageSelector';
 
 function ClientLayout() {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +22,7 @@ function ClientLayout() {
   };
 
   const navItems = [
-    { path: '/dashboard/appointments', label: 'My Appointments', icon: Calendar },
+    { path: '/dashboard/appointments', label: t('nav.myAppointments'), icon: Calendar },
   ];
 
   return (
@@ -29,7 +32,7 @@ function ClientLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center space-x-4">
+            <Link to="/" className="flex items-center space-x-4 hover:opacity-80 transition-opacity">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-white shadow border border-slate-200">
                   <img
@@ -44,7 +47,7 @@ function ClientLayout() {
                   </h1>
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-2">
@@ -53,7 +56,7 @@ function ClientLayout() {
                 className="flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-colors text-slate-600 hover:bg-slate-100"
               >
                 <HomeIcon size={18} />
-                <span>Home</span>
+                <span>{t('nav.home')}</span>
               </Link>
               {navItems.map((item) => (
                 <Link
@@ -71,8 +74,11 @@ function ClientLayout() {
               ))}
             </div>
 
-            {/* User Info and Logout */}
+            {/* User Info, Language and Logout */}
             <div className="flex items-center space-x-4">
+              <div className="hidden md:block">
+                <LanguageSelector variant="compact" />
+              </div>
               <div className="hidden md:block text-right">
                 <div className="text-sm font-medium" style={{color: '#1e3a5f'}}>
                   {user?.full_name || user?.username || user?.email}
@@ -86,7 +92,7 @@ function ClientLayout() {
                 className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
               >
                 <LogOut size={18} />
-                <span className="hidden md:inline">Logout</span>
+                <span className="hidden md:inline">{t('nav.logout')}</span>
               </button>
 
               {/* Mobile Menu Button */}
@@ -110,7 +116,7 @@ function ClientLayout() {
                 className="flex items-center space-x-2 px-4 py-3 rounded-xl font-medium transition-colors text-slate-600 hover:bg-slate-100"
               >
                 <HomeIcon size={18} />
-                <span>Home</span>
+                <span>{t('nav.home')}</span>
               </Link>
               {navItems.map((item) => (
                 <Link
@@ -135,6 +141,9 @@ function ClientLayout() {
                   <div className="text-xs text-slate-500">
                     Client
                   </div>
+                </div>
+                <div className="px-4 py-2">
+                  <LanguageSelector variant="compact" />
                 </div>
               </div>
             </div>

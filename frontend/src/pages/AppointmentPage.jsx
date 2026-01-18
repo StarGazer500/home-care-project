@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, User, Mail, Phone, FileText, CheckCircle, MapPin, AlertCircle, X } from 'lucide-react';
 import { api } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import MapLocationPicker from '../components/MapLocationPicker';
+import LanguageSelector from '../components/LanguageSelector';
 
 function AppointmentPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     full_name: '',
@@ -37,15 +40,17 @@ function AppointmentPage() {
     }
   }, [user]);
 
-  const serviceTypes = [
-    'Home Care',
-    'Medical Consultation',
-    'Physical Therapy',
-    'Nursing Care',
-    'Personal Care',
-    'Companionship',
-    'Other',
+  const getServiceTypes = () => [
+    { value: 'Home Care', label: t('appointments.homeCare') },
+    { value: 'Medical Consultation', label: t('appointments.medicalConsultation') },
+    { value: 'Physical Therapy', label: t('appointments.physicalTherapy') },
+    { value: 'Nursing Care', label: t('appointments.nursingCare') },
+    { value: 'Personal Care', label: t('appointments.personalCare') },
+    { value: 'Companionship', label: t('appointments.companionship') },
+    { value: 'Other', label: t('appointments.other') },
   ];
+
+  const serviceTypes = getServiceTypes();
 
   // Generate time slots from 8 AM to 8 PM in 30-minute intervals
   const generateTimeSlots = () => {
@@ -108,7 +113,7 @@ function AppointmentPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading...</p>
+          <p className="mt-4 text-slate-600">{t('appointments.loading')}</p>
         </div>
       </div>
     );
@@ -116,13 +121,17 @@ function AppointmentPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="absolute top-4 right-4">
+        <LanguageSelector variant="compact" />
+      </div>
       <div className="max-w-3xl mx-auto">
+    
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#1e3a5f' }}>
-            Book an Appointment
+            {t('appointments.title')}
           </h1>
           <p className="text-slate-600 text-lg">
-            Schedule your home care service at your convenience
+            {t('appointments.subtitle')}
           </p>
         </div>
 
@@ -131,15 +140,15 @@ function AppointmentPage() {
           <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-6 flex items-start space-x-3">
             <AlertCircle className="text-blue-500 flex-shrink-0 mt-0.5" size={24} />
             <div className="flex-1">
-              <h3 className="font-bold text-blue-900 mb-2">Login Required</h3>
+              <h3 className="font-bold text-blue-900 mb-2">{t('appointments.loginRequired')}</h3>
               <p className="text-sm text-blue-800 mb-4">
-                Please log in to book an appointment. This allows us to track your appointments and provide better service.
+                {t('appointments.loginRequiredDesc')}
               </p>
               <button
-                onClick={() => navigate('/login', { state: { from: '/appointments', message: 'Please log in to book an appointment' } })}
+                onClick={() => navigate('/login', { state: { from: '/appointments', message: t('appointments.loginRequiredDesc') } })}
                 className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors font-semibold text-sm"
               >
-                Go to Login
+                {t('appointments.goToLogin')}
               </button>
             </div>
           </div>
@@ -174,7 +183,7 @@ function AppointmentPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="full_name" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                  Full Name *
+                  {t('appointments.fullName')} *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -195,7 +204,7 @@ function AppointmentPage() {
 
               <div>
                 <label htmlFor="email" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                  Email *
+                  {t('appointments.email')} *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -216,7 +225,7 @@ function AppointmentPage() {
 
               <div>
                 <label htmlFor="phone" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                  Phone *
+                  {t('appointments.phone')} *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -237,7 +246,7 @@ function AppointmentPage() {
 
               <div>
                 <label htmlFor="service_type" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                  Service Type *
+                  {t('appointments.serviceType')} *
                 </label>
                 <select
                   id="service_type"
@@ -247,10 +256,10 @@ function AppointmentPage() {
                   className="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
                   required
                 >
-                  <option value="">Select a service</option>
+                  <option value="">{t('appointments.selectService')}</option>
                   {serviceTypes.map((service) => (
-                    <option key={service} value={service}>
-                      {service}
+                    <option key={service.value} value={service.value}>
+                      {service.label}
                     </option>
                   ))}
                 </select>
@@ -258,7 +267,7 @@ function AppointmentPage() {
 
               <div>
                 <label htmlFor="appointment_date" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                  Preferred Date *
+                  {t('appointments.preferredDate')} *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -279,7 +288,7 @@ function AppointmentPage() {
 
               <div>
                 <label htmlFor="appointment_time" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                  Preferred Time *
+                  {t('appointments.preferredTime')} *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -293,7 +302,7 @@ function AppointmentPage() {
                     className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors appearance-none cursor-pointer"
                     required
                   >
-                    <option value="">Select a time</option>
+                    <option value="">{t('appointments.selectTime')}</option>
                     {timeSlots.map((slot) => (
                       <option key={slot.value} value={slot.value}>
                         {slot.label}
@@ -307,17 +316,17 @@ function AppointmentPage() {
                   </div>
                 </div>
                 <p className="text-xs text-slate-500 mt-1">
-                  Available times: 8:00 AM - 8:00 PM
+                  {t('appointments.availableTimes')}
                 </p>
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                Service Location *
+                {t('appointments.serviceLocation')} *
               </label>
               <p className="text-xs text-slate-500 mb-3">
-                Click on the map to select where you need the service
+                {t('appointments.clickMapLocation')}
               </p>
               <MapLocationPicker
                 location={formData.location}
@@ -328,7 +337,7 @@ function AppointmentPage() {
 
             <div>
               <label htmlFor="location_address" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                Address (Optional)
+                {t('appointments.addressOptional')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -341,14 +350,14 @@ function AppointmentPage() {
                   value={formData.location_address}
                   onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
-                  placeholder="Street address, building, unit number, etc."
+                  placeholder={t('appointments.addressPlaceholder')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="notes" className="block text-sm font-bold mb-2" style={{ color: '#1e3a5f' }}>
-                Additional Notes
+                {t('appointments.additionalNotes')}
               </label>
               <div className="relative">
                 <div className="absolute top-3 left-0 pl-4 pointer-events-none">
@@ -361,7 +370,7 @@ function AppointmentPage() {
                   onChange={handleChange}
                   rows="4"
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors resize-none"
-                  placeholder="Any special requirements or additional information..."
+                  placeholder={t('appointments.notesPlaceholder')}
                 ></textarea>
               </div>
             </div>
@@ -372,7 +381,7 @@ function AppointmentPage() {
                 disabled={isSubmitting}
                 className="w-full bg-red-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Booking...' : 'Book Appointment'}
+                {isSubmitting ? t('appointments.booking') : t('appointments.bookNew')}
               </button>
             </div>
           </form>
@@ -396,21 +405,21 @@ function AppointmentPage() {
               </div>
 
               <h2 className="text-3xl font-bold mb-4" style={{ color: '#1e3a5f' }}>
-                Appointment Booked!
+                {t('appointments.appointmentBooked')}
               </h2>
 
               <p className="text-slate-600 text-lg mb-6">
-                Your appointment has been successfully scheduled. We will contact you soon to confirm the details.
+                {t('appointments.appointmentSuccess')}
               </p>
 
               <div className="bg-slate-50 rounded-2xl p-4 mb-6">
                 <p className="text-sm text-slate-700">
-                  <strong>What's next?</strong>
+                  <strong>{t('appointments.whatsNext')}</strong>
                 </p>
                 <ul className="text-sm text-slate-600 mt-2 space-y-1 text-left">
-                  <li>• You'll receive a confirmation email shortly</li>
-                  <li>• Our team will review your request</li>
-                  <li>• We'll contact you within 24 hours</li>
+                  <li>• {t('appointments.confirmationEmail')}</li>
+                  <li>• {t('appointments.teamReview')}</li>
+                  <li>• {t('appointments.contactWithin')}</li>
                 </ul>
               </div>
 
@@ -419,7 +428,7 @@ function AppointmentPage() {
                   onClick={() => setShowSuccessModal(false)}
                   className="flex-1 px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition-colors"
                 >
-                  Book Another
+                  {t('appointments.bookAnother')}
                 </button>
                 <button
                   onClick={() => {
@@ -430,7 +439,7 @@ function AppointmentPage() {
                   }}
                   className="flex-1 px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors"
                 >
-                  {user ? 'View My Appointments' : 'Go to Home'}
+                  {user ? t('appointments.viewMyAppointments') : t('appointments.goToHome')}
                 </button>
               </div>
             </div>

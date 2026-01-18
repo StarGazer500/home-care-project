@@ -1,11 +1,13 @@
-import React from 'react';
+import { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Home, Users, Calendar, Map, LogOut, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { Home, Users, Calendar, LogOut, Menu, X, UserCog } from 'lucide-react';
+import LanguageSelector from './LanguageSelector';
 
 function AdminLayout() {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,10 +22,10 @@ function AdminLayout() {
   };
 
   const navItems = [
-    { path: '/admin', label: 'Dashboard', icon: Home },
-    { path: '/admin/contacts', label: 'Contacts', icon: Users },
-    { path: '/admin/appointments', label: 'Appointments', icon: Calendar },
-    // { path: '/admin/map', label: 'Map View', icon: Map },
+    { path: '/admin', label: t('nav.dashboard'), icon: Home },
+    { path: '/admin/contacts', label: t('nav.contacts'), icon: Users },
+    { path: '/admin/appointments', label: t('nav.appointments'), icon: Calendar },
+    { path: '/admin/users', label: t('nav.users'), icon: UserCog },
   ];
 
   return (
@@ -33,7 +35,7 @@ function AdminLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center space-x-4">
+            <Link to="/" className="flex items-center space-x-4 hover:opacity-80 transition-opacity">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-white shadow border border-slate-200">
                   <img
@@ -48,7 +50,7 @@ function AdminLayout() {
                   </h1>
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-2">
@@ -68,8 +70,11 @@ function AdminLayout() {
               ))}
             </div>
 
-            {/* User Info and Logout */}
+            {/* User Info, Language and Logout */}
             <div className="flex items-center space-x-4">
+              <div className="hidden md:block">
+                <LanguageSelector variant="compact" />
+              </div>
               <div className="hidden md:block text-right">
                 <div className="text-sm font-medium" style={{color: '#1e3a5f'}}>
                   {user?.name || user?.email}
@@ -83,7 +88,7 @@ function AdminLayout() {
                 className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
               >
                 <LogOut size={18} />
-                <span className="hidden md:inline">Logout</span>
+                <span className="hidden md:inline">{t('nav.logout')}</span>
               </button>
 
               {/* Mobile Menu Button */}
@@ -124,6 +129,9 @@ function AdminLayout() {
                   <div className="text-xs text-slate-500 capitalize">
                     {user?.role || 'Admin'}
                   </div>
+                </div>
+                <div className="px-4 py-2">
+                  <LanguageSelector variant="compact" />
                 </div>
               </div>
             </div>

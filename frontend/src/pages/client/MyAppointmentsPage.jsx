@@ -3,6 +3,7 @@ import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, Loader, Plus, User,
 import { useAuth } from '../../contexts/AuthContext';
 import { api } from '../../services/api';
 import MapLocationPicker from '../../components/MapLocationPicker';
+import { useLanguage } from '../../contexts/LanguageContext'
 
 function MyAppointmentsPage() {
   const { user } = useAuth();
@@ -25,6 +26,8 @@ function MyAppointmentsPage() {
     location: null,
     location_address: '',
   });
+
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetchAppointments();
@@ -129,7 +132,8 @@ function MyAppointmentsPage() {
         }`}
       >
         {getStatusIcon(status)}
-        <span>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
+        {t(`appointments.${status}`)}
+        {/* <span>{status.charAt(0).toUpperCase() + status.slice(1)}</span> */}
       </span>
     );
   };
@@ -141,6 +145,36 @@ function MyAppointmentsPage() {
       day: 'numeric',
     });
   };
+
+  const getServiceName = (serviceName)=>{
+    if (serviceName==='Home Care'){
+      return 'homeCare'
+
+    }else if (serviceName==='Medical Consultation'){
+       return 'medicalConsultation'
+      
+    }else if (serviceName==='Physical Therapy'){
+      return 'physicalTherapy'
+      
+    }else if (serviceName==='Nursing Care'){
+      return 'nursingCare'
+      
+    }else if (serviceName==='Personal Care'){
+      return 'personalCare'
+      
+    }else if (serviceName==='Companionship'){
+      return 'companionship'
+      
+    }
+
+    else if (serviceName==='Other'){
+       return 'other'
+    }
+  }
+
+  // useEffect(()=>{
+  //   console.log(getServiceName())
+  // })
 
   const formatTime = (timeString) => {
     return timeString.slice(0, 5);
@@ -190,10 +224,12 @@ function MyAppointmentsPage() {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-bold" style={{ color: '#1e3a5f' }}>
-            My Appointments
+            {t('appointments.myAppointments')}
+            {/* My Appointments */}
           </h1>
           <p className="text-slate-600 mt-1">
-            Track and manage your healthcare appointments
+            {t('appointments.trackManage')}
+            {/* Track and manage your healthcare appointments */}
           </p>
         </div>
         <button
@@ -201,7 +237,8 @@ function MyAppointmentsPage() {
           className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors"
         >
           <Plus size={20} />
-          <span>Book Appointment</span>
+           {t('appointments.bookNew')}
+          {/* <span>Book Appointment</span> */}
         </button>
       </div>
 
@@ -210,7 +247,7 @@ function MyAppointmentsPage() {
         <div className="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-yellow-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600">Pending</p>
+              <p className="text-sm font-medium text-slate-600">{t('appointments.pending')}</p>
               <p className="text-3xl font-bold text-slate-900">{pendingCount}</p>
             </div>
             <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -222,7 +259,7 @@ function MyAppointmentsPage() {
         <div className="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-green-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600">Confirmed</p>
+              <p className="text-sm font-medium text-slate-600">{t('appointments.confirmed')}</p>
               <p className="text-3xl font-bold text-slate-900">{upcomingCount}</p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -234,7 +271,7 @@ function MyAppointmentsPage() {
         <div className="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-slate-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600">Total</p>
+              <p className="text-sm font-medium text-slate-600">{t('admin.totalAppointments')}</p>
               <p className="text-3xl font-bold text-slate-900">{appointments.length}</p>
             </div>
             <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
@@ -257,7 +294,8 @@ function MyAppointmentsPage() {
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {t(`appointments.${status}`)}
+              {/* {status.charAt(0).toUpperCase() + status.slice(1)} */}
             </button>
           ))}
         </div>
@@ -268,7 +306,8 @@ function MyAppointmentsPage() {
         <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
           <Calendar className="mx-auto text-slate-300 mb-4" size={64} />
           <h3 className="text-xl font-semibold text-slate-700 mb-2">
-            No appointments found
+            {/* No appointments found */}
+            {t('appointments.noAppointments')}
           </h3>
           <p className="text-slate-500 mb-6">
             {filter === 'all'
@@ -279,7 +318,8 @@ function MyAppointmentsPage() {
             href="/appointments"
             className="inline-block px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors"
           >
-            Book an Appointment
+            {t('appointments.bookNew')}
+            {/* Book an Appointment */}
           </a>
         </div>
       ) : (
@@ -295,7 +335,8 @@ function MyAppointmentsPage() {
                     <div className="flex items-start justify-between">
                       <div>
                         <h3 className="text-lg font-semibold text-slate-900">
-                          {appointment.service_type}
+                          {/* {appointment.service_type} */}
+                          {t(`appointments.${getServiceName(appointment.service_type)}`)}
                         </h3>
                         <p className="text-sm text-slate-600">
                           Appointment ID: #{appointment.id}
@@ -356,7 +397,7 @@ function MyAppointmentsPage() {
                     className="px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 border-2 border-slate-200 hover:border-red-500 hover:bg-red-50 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
                   >
                     <ChevronLeft size={20} />
-                    <span className="hidden sm:inline">Previous</span>
+                    <span className="hidden sm:inline">{t('appointments.previous')}</span>
                   </button>
 
                   <div className="flex items-center space-x-1">
@@ -393,7 +434,7 @@ function MyAppointmentsPage() {
                     disabled={currentPage >= Math.ceil(totalCount / itemsPerPage)}
                     className="px-4 py-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 border-2 border-slate-200 hover:border-red-500 hover:bg-red-50 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
                   >
-                    <span className="hidden sm:inline">Next</span>
+                    <span className="hidden sm:inline">{t('appointments.next')}</span>
                     <ChevronRight size={20} />
                   </button>
                 </div>

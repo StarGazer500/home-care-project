@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { api } from '../services/api';
 import { Lock, Mail, User, Phone, AlertCircle } from 'lucide-react';
+import LanguageSelector from '../components/LanguageSelector';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ function RegisterPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -43,6 +46,11 @@ function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4">
+        <LanguageSelector variant="compact" />
+      </div>
+
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
           <div className="text-center mb-8">
@@ -54,10 +62,10 @@ function RegisterPage() {
               />
             </div>
             <h2 className="text-3xl font-bold" style={{color: '#1e3a5f'}}>
-              Create Account
+              {t('auth.createAccount')}
             </h2>
             <p className="text-slate-600 mt-2">
-              Register to manage your appointments
+              {t('auth.registerSubtitle')}
             </p>
           </div>
 
@@ -71,7 +79,7 @@ function RegisterPage() {
 
             <div>
               <label htmlFor="full_name" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Full Name
+                {t('auth.fullName')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -84,7 +92,6 @@ function RegisterPage() {
                   value={formData.full_name}
                   onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
-                  placeholder="John Doe"
                   required
                 />
               </div>
@@ -92,7 +99,7 @@ function RegisterPage() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Username
+                {t('auth.username')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -105,7 +112,6 @@ function RegisterPage() {
                   value={formData.username}
                   onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
-                  placeholder="johndoe"
                   required
                   minLength={3}
                 />
@@ -114,7 +120,7 @@ function RegisterPage() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Email
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -127,7 +133,6 @@ function RegisterPage() {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-slate-200 bg-white focus:border-red-500 focus:outline-none transition-colors"
-                  placeholder="john@example.com"
                   required
                 />
               </div>
@@ -135,7 +140,7 @@ function RegisterPage() {
 
             <div>
               <label htmlFor="phone" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Phone
+                {t('auth.phone')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -155,7 +160,7 @@ function RegisterPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -173,9 +178,6 @@ function RegisterPage() {
                   minLength={8}
                 />
               </div>
-              <p className="text-xs text-slate-500 mt-2">
-                Must be at least 8 characters with one uppercase letter and one digit
-              </p>
             </div>
 
             <button
@@ -183,14 +185,14 @@ function RegisterPage() {
               disabled={isLoading}
               className="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
+              {isLoading ? t('common.loading') : t('auth.createAccount')}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-slate-600">
-            Already have an account?{' '}
+            {t('auth.haveAccount')}{' '}
             <Link to="/login" className="text-red-500 font-semibold hover:text-red-600">
-              Sign in
+              {t('auth.signIn')}
             </Link>
           </div>
 
@@ -198,7 +200,7 @@ function RegisterPage() {
             to="/"
             className="block mt-6 text-center text-sm text-slate-500 hover:text-slate-700 transition-colors"
           >
-            ← Back to Homepage
+            ← {t('nav.home')}
           </Link>
         </div>
       </div>

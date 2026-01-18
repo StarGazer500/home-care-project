@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
+import LanguageSelector from '../components/LanguageSelector';
+import { useLanguage } from '../contexts/LanguageContext';
 
 function HomePage() {
+  const { t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeService, setActiveService] = useState(null);
   const [scrolled, setScrolled] = useState(false);
@@ -89,76 +92,81 @@ function HomePage() {
     }
   };
 
-  const services = [
+  const getServices = () => [
     {
       id: 'home-care',
       icon: Home,
-      title: 'Home Care Services',
-      subtitle: 'Daily living assistance',
-      description: 'Compassionate support for daily activities, personal care, and maintaining independence at home.',
-      features: ['Personal hygiene assistance', 'Meal preparation', 'Mobility support', 'Medication reminders'],
-      price: 'From €32/hour',
+      title: t('services.homeCare'),
+      subtitle: t('services.homeCareSubtitle') || 'Daily living assistance',
+      description: t('services.homeCareDesc'),
+      features: [t('services.feature1') || 'Personal hygiene assistance', t('services.feature2') || 'Meal preparation', t('services.feature3') || 'Mobility support', t('services.feature4') || 'Medication reminders'],
+      price: `${t('services.from')} €32/${t('services.hour')}`,
       color: 'bg-cyan-50 border-cyan-200'
     },
     {
       id: 'nursing',
       icon: Stethoscope,
-      title: 'Home Nursing',
-      subtitle: 'Professional medical care',
-      description: 'Qualified nurses providing expert medical care in the comfort of your home.',
-      features: ['Wound care', 'Injections & medications', 'Health monitoring', 'Post-surgery care'],
-      price: 'From €59/hour',
+      title: t('services.nursing'),
+      subtitle: t('services.nursingSubtitle') || 'Professional medical care',
+      description: t('services.nursingDesc'),
+      features: [t('services.nursingFeature1') || 'Wound care', t('services.nursingFeature2') || 'Injections & medications', t('services.nursingFeature3') || 'Health monitoring', t('services.nursingFeature4') || 'Post-surgery care'],
+      price: `${t('services.from')} €59/${t('services.hour')}`,
       color: 'bg-red-50 border-red-200'
     },
     {
       id: 'cleaning',
       icon: Sparkles,
-      title: 'Home Cleaning',
-      subtitle: 'Professional housekeeping',
-      description: 'Keep your home fresh and clean with our reliable cleaning services.',
-      features: ['Regular cleaning', 'Deep cleaning', 'Window washing', 'Moving assistance'],
-      price: 'From €37.82/hour',
+      title: t('services.cleaning'),
+      subtitle: t('services.cleaningSubtitle') || 'Professional housekeeping',
+      description: t('services.cleaningDesc'),
+      features: [t('services.cleaningFeature1') || 'Regular cleaning', t('services.cleaningFeature2') || 'Deep cleaning', t('services.cleaningFeature3') || 'Window washing', t('services.cleaningFeature4') || 'Moving assistance'],
+      price: `${t('services.from')} €37.82/${t('services.hour')}`,
       color: 'bg-blue-50 border-blue-200'
     },
     {
       id: 'palliative',
       icon: Heart,
-      title: 'Palliative Care',
-      subtitle: 'Compassionate end-of-life care',
-      description: 'Dignified, comfortable care during life\'s final journey, supporting patients and families.',
-      features: ['24/7 care options', 'Pain management', 'Emotional support', 'Family counseling'],
-      price: 'Custom pricing',
+      title: t('services.palliative'),
+      subtitle: t('services.palliativeSubtitle') || 'Compassionate end-of-life care',
+      description: t('services.palliativeDesc'),
+      features: [t('services.palliativeFeature1') || '24/7 care options', t('services.palliativeFeature2') || 'Pain management', t('services.palliativeFeature3') || 'Emotional support', t('services.palliativeFeature4') || 'Family counseling'],
+      price: t('services.customPricing') || 'Custom pricing',
       color: 'bg-rose-50 border-rose-200'
     }
   ];
 
-  const stats = [
-    { icon: Users, value: '2,500+', label: 'Happy Clients' },
-    { icon: Award, value: '15+', label: 'Years Experience' },
-    { icon: Clock, value: '24/7', label: 'Availability' },
-    { icon: Shield, value: '100%', label: 'Licensed Staff' }
+  const getStats = () => [
+    { icon: Users, value: '2,500+', label: t('hero.happyClients') },
+    { icon: Award, value: '15+', label: t('hero.yearsExperience') },
+    { icon: Clock, value: '24/7', label: t('hero.availability') },
+    { icon: Shield, value: '100%', label: t('hero.licensedStaff') }
   ];
 
-  const testimonials = [
+  const services = getServices();
+  const stats = getStats();
+
+  const getTestimonials = () => [
     {
       name: 'Maria Korhonen',
-      role: 'Family Member',
-      text: 'The care my mother receives is exceptional. The staff is professional, caring, and truly makes a difference in her quality of life.',
+      role: t('testimonials.familyMember'),
+      text: t('testimonials.testimonial1'),
       rating: 5
     },
     {
       name: 'Jukka Virtanen',
-      role: 'Client',
-      text: 'After my surgery, the home nursing service was invaluable. Professional, punctual, and compassionate care every visit.',
+      role: t('testimonials.client'),
+      text: t('testimonials.testimonial2'),
       rating: 5
     },
     {
       name: 'Anna Nieminen',
-      role: 'Client',
-      text: 'The cleaning service keeps my home spotless. It\'s such a relief to have reliable, thorough professionals I can trust.',
+      role: t('testimonials.client'),
+      text: t('testimonials.testimonial3'),
       rating: 5
     }
   ];
+
+  const testimonials = getTestimonials();
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
@@ -166,7 +174,7 @@ function HomePage() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <div className="flex items-center space-x-3">
+            <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer">
               <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden bg-white shadow-lg border-2 border-slate-200">
                 <img
                   src="/logo.jpeg"
@@ -178,23 +186,24 @@ function HomePage() {
                 <h1 className="font-display text-2xl font-bold text-navy-900" style={{color: '#1e3a5f'}}>Bridge Hoito Oy</h1>
                 <p className="text-xs text-cyan-600">Home Healthcare Services</p>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#services" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>Services</a>
-              <a href="#about" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>About</a>
-              <a href="#pricing" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>Pricing</a>
+              <a href="#services" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.services')}</a>
+              <a href="#about" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
+              <a href="#pricing" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.pricing')}</a>
               <Link to="/appointments" className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
                 <Calendar size={18} />
-                <span>Book</span>
+                <span>{t('nav.book')}</span>
               </Link>
               <Link to="/login" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
-                Login
+                {t('nav.login')}
               </Link>
               <Link to="/register" className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-2.5 rounded-full hover:shadow-lg transition-all font-medium">
-                Sign Up
+                {t('nav.signup')}
               </Link>
+              <LanguageSelector variant="compact" />
             </div>
 
             {/* Mobile Menu Button */}
@@ -211,19 +220,22 @@ function HomePage() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-200">
             <div className="px-4 py-6 space-y-4">
-              <a href="#services" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>Services</a>
-              <a href="#about" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>About</a>
-              <a href="#pricing" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>Pricing</a>
+              <a href="#services" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.services')}</a>
+              <a href="#about" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
+              <a href="#pricing" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.pricing')}</a>
               <Link to="/appointments" className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
                 <Calendar size={18} />
-                <span>Book Appointment</span>
+                <span>{t('hero.bookAppointment')}</span>
               </Link>
               <Link to="/login" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
-                Login
+                {t('nav.login')}
               </Link>
               <Link to="/register" className="block bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-full text-center font-medium">
-                Sign Up
+                {t('nav.signup')}
               </Link>
+              <div className="pt-4 border-t border-slate-200">
+                <LanguageSelector variant="compact" />
+              </div>
             </div>
           </div>
         )}
@@ -235,16 +247,14 @@ function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="space-y-6">
-                <div className="inline-block px-4 py-2 bg-white rounded-full border-2 border-red-200 shadow-sm">
-                  <span className="text-red-500 font-semibold text-sm">Trusted Since 2008</span>
-                </div>
+               
                 <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight" style={{color: '#1e3a5f'}}>
-                  Care That Feels
+                  {t('hero.title1')}
                   <br />
-                  <span className="text-red-500">Like Home</span>
+                  <span className="text-red-500">{t('hero.title2')}</span>
                 </h1>
                 <p className="text-xl text-slate-600 leading-relaxed">
-                  Professional healthcare services delivered with warmth, compassion, and respect in the comfort of your own home.
+                  {t('hero.subtitle')}
                 </p>
               </div>
 
@@ -253,14 +263,14 @@ function HomePage() {
                   href="#services"
                   className="px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:shadow-xl transition-all font-semibold inline-flex items-center space-x-2"
                 >
-                  <span>Explore Our Services</span>
+                  <span>{t('hero.ourServices')}</span>
                   <ChevronRight size={20} />
                 </a>
                 <a
                   href="#contact"
                   className="px-8 py-4 border-2 border-red-500 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all font-semibold"
                 >
-                  Get In Touch
+                  {t('hero.getInTouch')}
                 </a>
               </div>
 
@@ -298,10 +308,10 @@ function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
-              Our <span className="text-red-500">Services</span>
+              {t('services.title')}
             </h2>
             <p className="text-xl text-slate-600">
-              Comprehensive care solutions tailored to your unique needs
+              {t('services.subtitle')}
             </p>
           </div>
 
@@ -347,10 +357,10 @@ function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
-              Why Choose <span className="text-red-500">Us</span>
+              {t('about.whyChooseUs')}
             </h2>
             <p className="text-xl text-slate-600">
-              Our commitment to excellence in every aspect of care
+              {t('about.commitment')}
             </p>
           </div>
 
@@ -359,9 +369,9 @@ function HomePage() {
               <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                 <Heart className="text-white" size={32} />
               </div>
-              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>Compassionate Care</h3>
+              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>{t('about.compassionateCare')}</h3>
               <p className="text-slate-600 leading-relaxed">
-                We treat every client as family, providing care with genuine warmth, empathy, and respect for their dignity.
+                {t('about.compassionateCareDesc')}
               </p>
             </div>
 
@@ -369,9 +379,9 @@ function HomePage() {
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                 <Shield className="text-white" size={32} />
               </div>
-              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>Licensed Professionals</h3>
+              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>{t('about.licensedProfessionals')}</h3>
               <p className="text-slate-600 leading-relaxed">
-                All our staff are fully licensed, background-checked, and continuously trained to provide the highest quality care.
+                {t('about.licensedProfessionalsDesc')}
               </p>
             </div>
 
@@ -379,9 +389,9 @@ function HomePage() {
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                 <Clock className="text-white" size={32} />
               </div>
-              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>Always Available</h3>
+              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>{t('about.alwaysAvailable')}</h3>
               <p className="text-slate-600 leading-relaxed">
-                Round-the-clock availability ensures you get the care you need, whenever you need it, day or night.
+                {t('about.alwaysAvailableDesc')}
               </p>
             </div>
           </div>
@@ -393,10 +403,10 @@ function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
-              Simple <span className="text-red-500">Pricing</span>
+              {t('pricing.title')} <span className="text-red-500">{t('pricing.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-slate-600">
-              Transparent rates with no hidden fees
+              {t('pricing.subtitle')}
             </p>
           </div>
 
@@ -408,18 +418,18 @@ function HomePage() {
                   <Home className="text-cyan-600" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>Home Care</h3>
-                  <p className="text-sm text-slate-600">Daily assistance</p>
+                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.homeCare')}</h3>
+                  <p className="text-sm text-slate-600">{t('pricing.homeCareSubtitle')}</p>
                 </div>
               </div>
               <div className="mb-6">
-                <div className="font-display text-4xl font-bold text-red-500 mb-2">€32<span className="text-xl text-slate-600">/hour</span></div>
-                <p className="text-sm text-slate-600">Starting rate for home care services</p>
+                <div className="font-display text-4xl font-bold text-red-500 mb-2">€32<span className="text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-sm text-slate-600">{t('pricing.homeCareRate')}</p>
               </div>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Personal care assistance</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Meal preparation</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Mobility support</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature1')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature2')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature3')}</li>
               </ul>
             </div>
 
@@ -430,18 +440,18 @@ function HomePage() {
                   <Stethoscope className="text-red-500" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>Nursing</h3>
-                  <p className="text-sm text-slate-600">Medical care</p>
+                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.nursing')}</h3>
+                  <p className="text-sm text-slate-600">{t('pricing.nursingSubtitle')}</p>
                 </div>
               </div>
               <div className="mb-6">
-                <div className="font-display text-4xl font-bold text-red-500 mb-2">€59<span className="text-xl text-slate-600">/hour</span></div>
-                <p className="text-sm text-slate-600">Professional nursing services</p>
+                <div className="font-display text-4xl font-bold text-red-500 mb-2">€59<span className="text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-sm text-slate-600">{t('pricing.nursingRate')}</p>
               </div>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Wound care & dressing</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Medication administration</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Health monitoring</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature1')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature2')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature3')}</li>
               </ul>
             </div>
 
@@ -452,18 +462,18 @@ function HomePage() {
                   <Sparkles className="text-blue-600" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>Cleaning</h3>
-                  <p className="text-sm text-slate-600">Housekeeping</p>
+                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.cleaning')}</h3>
+                  <p className="text-sm text-slate-600">{t('pricing.cleaningSubtitle')}</p>
                 </div>
               </div>
               <div className="mb-6">
-                <div className="font-display text-4xl font-bold text-red-500 mb-2">€37.82<span className="text-xl text-slate-600">/hour</span></div>
-                <p className="text-sm text-slate-600">Professional home cleaning</p>
+                <div className="font-display text-4xl font-bold text-red-500 mb-2">€37.82<span className="text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-sm text-slate-600">{t('pricing.cleaningRate')}</p>
               </div>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Regular & deep cleaning</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Window washing</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Tax deductible</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature1')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature2')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature3')}</li>
               </ul>
             </div>
 
@@ -474,18 +484,18 @@ function HomePage() {
                   <Heart className="text-red-500" size={24} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>Palliative Care</h3>
-                  <p className="text-sm text-slate-600">End-of-life support</p>
+                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.palliative')}</h3>
+                  <p className="text-sm text-slate-600">{t('pricing.palliativeSubtitle')}</p>
                 </div>
               </div>
               <div className="mb-6">
-                <div className="font-display text-3xl font-bold text-red-500 mb-2">Custom Quote</div>
-                <p className="text-sm text-slate-600">Personalized pricing for your needs</p>
+                <div className="font-display text-3xl font-bold text-red-500 mb-2">{t('pricing.customQuote')}</div>
+                <p className="text-sm text-slate-600">{t('pricing.palliativeRate')}</p>
               </div>
               <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />24/7 care available</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Pain management</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />Family support</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature1')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature2')}</li>
+                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature3')}</li>
               </ul>
             </div>
           </div>
@@ -495,18 +505,18 @@ function HomePage() {
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
                 <div className="text-2xl mb-2">✓</div>
-                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>Service Vouchers</h4>
-                <p className="text-sm text-slate-600">We accept municipal palveluseteli</p>
+                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>{t('pricing.serviceVouchers')}</h4>
+                <p className="text-sm text-slate-600">{t('pricing.serviceVouchersDesc')}</p>
               </div>
               <div>
                 <div className="text-2xl mb-2">✓</div>
-                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>Flexible Plans</h4>
-                <p className="text-sm text-slate-600">Weekly packages with discounts</p>
+                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>{t('pricing.flexiblePlans')}</h4>
+                <p className="text-sm text-slate-600">{t('pricing.flexiblePlansDesc')}</p>
               </div>
               <div>
                 <div className="text-2xl mb-2">✓</div>
-                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>No Hidden Fees</h4>
-                <p className="text-sm text-slate-600">Transparent, honest pricing</p>
+                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>{t('pricing.noHiddenFees')}</h4>
+                <p className="text-sm text-slate-600">{t('pricing.noHiddenFeesDesc')}</p>
               </div>
             </div>
           </div>
@@ -518,10 +528,10 @@ function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
-              What Our <span className="text-red-500">Clients Say</span>
+              {t('testimonials.title')} <span className="text-red-500">{t('testimonials.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-slate-600">
-              Real stories from the families we serve
+              {t('testimonials.subtitle')}
             </p>
           </div>
 
@@ -551,10 +561,10 @@ function HomePage() {
             <div className="space-y-8">
               <div>
                 <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
-                  Let's <span className="text-red-500">Connect</span>
+                  {t('contact.title')}
                 </h2>
                 <p className="text-xl text-slate-600">
-                  We're here to answer your questions and provide the care you deserve
+                  {t('contact.subtitle')}
                 </p>
               </div>
 
@@ -564,7 +574,7 @@ function HomePage() {
                     <Phone className="text-white" size={20} />
                   </div>
                   <div>
-                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>Phone</div>
+                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>{t('contact.phone')}</div>
                     <a href="tel:+358961500069" className="text-slate-600 hover:text-red-500 transition-colors">
                       +358 (09) 615 000 69
                     </a>
@@ -576,7 +586,7 @@ function HomePage() {
                     <Mail className="text-white" size={20} />
                   </div>
                   <div>
-                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>Email</div>
+                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>{t('contact.email')}</div>
                     <a href="mailto:info@bridgehoito.fi" className="text-slate-600 hover:text-red-500 transition-colors">
                       info@bridgehoito.fi
                     </a>
@@ -588,28 +598,28 @@ function HomePage() {
                     <MapPin className="text-white" size={20} />
                   </div>
                   <div>
-                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>Service Area</div>
+                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>{t('contact.serviceArea')}</div>
                     <p className="text-slate-600">
-                      Helsinki, Espoo & Greater Helsinki Area
+                      {t('contact.serviceAreaText')}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-slate-50 rounded-3xl p-6">
-                <h3 className="font-bold mb-4" style={{color: '#1e3a5f'}}>Office Hours</h3>
+                <h3 className="font-bold mb-4" style={{color: '#1e3a5f'}}>{t('contact.officeHours')}</h3>
                 <div className="space-y-2 text-sm text-slate-700">
                   <div className="flex justify-between">
-                    <span>Monday - Friday</span>
-                    <span className="font-medium">8:00 AM - 8:00 PM</span>
+                    <span>{t('contact.mondayFriday')}</span>
+                    <span className="font-medium">8:00 - 20:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Weekend</span>
-                    <span className="font-medium">9:00 AM - 6:00 PM</span>
+                    <span>{t('contact.weekend')}</span>
+                    <span className="font-medium">9:00 - 18:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Emergency</span>
-                    <span className="font-medium text-red-500">24/7 Available</span>
+                    <span>{t('contact.emergency')}</span>
+                    <span className="font-medium text-red-500">{t('contact.emergencyAvailable')}</span>
                   </div>
                 </div>
               </div>
@@ -628,33 +638,31 @@ function HomePage() {
                 )}
 
                 <div>
-                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>Full Name</label>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('contact.fullName')}</label>
                   <input
                     type="text"
                     name="full_name"
                     value={contactForm.full_name}
                     onChange={handleContactFormChange}
                     className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors"
-                    placeholder="John Doe"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>Email Address</label>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('contact.email')}</label>
                   <input
                     type="email"
                     name="email"
                     value={contactForm.email}
                     onChange={handleContactFormChange}
                     className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors"
-                    placeholder="john@example.com"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>Phone Number</label>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('contact.phone')}</label>
                   <input
                     type="tel"
                     name="phone"
@@ -666,22 +674,22 @@ function HomePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>Service Needed</label>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('contact.service')}</label>
                   <select
                     name="service_needed"
                     value={contactForm.service_needed}
                     onChange={handleContactFormChange}
                     className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors"
                   >
-                    <option>Home Care Services</option>
-                    <option>Home Nursing</option>
-                    <option>Home Cleaning</option>
-                    <option>Palliative Care</option>
+                    <option value="Home Care Services">{t('services.homeCare')}</option>
+                    <option value="Home Nursing">{t('services.nursing')}</option>
+                    <option value="Home Cleaning">{t('services.cleaning')}</option>
+                    <option value="Palliative Care">{t('services.palliative')}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>Message</label>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('contact.message')}</label>
                   <textarea
                     name="message"
                     value={contactForm.message}
@@ -697,7 +705,7 @@ function HomePage() {
                   disabled={isSubmitting}
                   className="w-full px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:shadow-xl transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? t('contact.sending') : t('contact.send')}
                 </button>
               </form>
             </div>
@@ -713,7 +721,7 @@ function HomePage() {
           style={{ animation: 'bounce 2s infinite' }}
         >
           <Calendar size={20} />
-          <span>Book Now</span>
+          <span>{t('hero.bookNow')}</span>
         </Link>
       )}
 
@@ -733,37 +741,37 @@ function HomePage() {
                 <span className="font-display text-xl font-bold text-white">Bridge Hoito Oy</span>
               </div>
               <p className="text-sm text-slate-400">
-                Compassionate healthcare services delivered with warmth and professionalism.
+                {t('footer.description')}
               </p>
             </div>
 
             <div>
-              <h3 className="font-bold text-white mb-4">Services</h3>
+              <h3 className="font-bold text-white mb-4">{t('footer.services')}</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-red-400 transition-colors">Home Care</a></li>
-                <li><a href="#" className="hover:text-red-400 transition-colors">Nursing</a></li>
-                <li><a href="#" className="hover:text-red-400 transition-colors">Cleaning</a></li>
-                <li><a href="#" className="hover:text-red-400 transition-colors">Palliative Care</a></li>
+                <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.homeCare')}</a></li>
+                <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.nursing')}</a></li>
+                <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.cleaning')}</a></li>
+                <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.palliativeCare')}</a></li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-bold text-white mb-4">Company</h3>
+              <h3 className="font-bold text-white mb-4">{t('footer.company')}</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-red-400 transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-red-400 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-red-400 transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-red-400 transition-colors">Terms</a></li>
+                <li><a href="#about" className="hover:text-red-400 transition-colors">{t('footer.aboutUs')}</a></li>
+                <li><a href="#" className="hover:text-red-400 transition-colors">{t('footer.careers')}</a></li>
+                <li><a href="#" className="hover:text-red-400 transition-colors">{t('footer.privacy')}</a></li>
+                <li><a href="#" className="hover:text-red-400 transition-colors">{t('footer.terms')}</a></li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-bold text-white mb-4">Stay Updated</h3>
-              <p className="text-sm text-slate-400 mb-3">Get health tips and news</p>
+              <h3 className="font-bold text-white mb-4">{t('footer.stayUpdated')}</h3>
+              <p className="text-sm text-slate-400 mb-3">{t('footer.healthTips')}</p>
               <div className="flex space-x-2">
                 <input
                   type="email"
-                  placeholder="Your email"
+                  placeholder={t('footer.yourEmail')}
                   className="flex-1 px-4 py-2 rounded-full bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:border-red-400"
                 />
                 <button className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full hover:shadow-lg transition-all">
@@ -774,7 +782,7 @@ function HomePage() {
           </div>
 
           <div className="pt-8 border-t border-slate-700 text-center text-sm text-slate-400">
-            <p>© 2025 Bridge Hoito Oy. All rights reserved.</p>
+            <p>© 2025 Bridge Hoito Oy. {t('footer.rights')}</p>
           </div>
         </div>
       </footer>
