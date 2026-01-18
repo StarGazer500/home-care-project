@@ -14,6 +14,7 @@ import ContactDetailPage from './pages/admin/ContactDetailPage';
 import AppointmentsPage from './pages/admin/AppointmentsPage';
 import AppointmentDetailPage from './pages/admin/AppointmentDetailPage';
 import UsersPage from './pages/admin/UsersPage';
+import FeedbacksPage from './pages/admin/FeedbacksPage';
 // import AppointmentsMapPage from './pages/admin/AppointmentsMapPage';
 import ClientLayout from './components/ClientLayout';
 import MyAppointmentsPage from './pages/client/MyAppointmentsPage';
@@ -57,6 +58,7 @@ function App() {
             <Route path="appointments" element={<AppointmentsPage />} />
             <Route path="appointments/:id" element={<AppointmentDetailPage />} />
             <Route path="users" element={<UsersPage />} />
+            <Route path="feedbacks" element={<FeedbacksPage />} />
             {/* <Route path="map" element={<AppointmentsMapPage />} /> */}
           </Route>
 

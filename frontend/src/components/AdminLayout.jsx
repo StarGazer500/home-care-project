@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Home, Users, Calendar, LogOut, Menu, X, UserCog } from 'lucide-react';
+import { Home, Users, Calendar, LogOut, Menu, X, UserCog, MessageSquare } from 'lucide-react';
 import LanguageSelector from './LanguageSelector';
 
 function AdminLayout() {
@@ -25,6 +25,7 @@ function AdminLayout() {
     { path: '/admin', label: t('nav.dashboard'), icon: Home },
     { path: '/admin/contacts', label: t('nav.contacts'), icon: Users },
     { path: '/admin/appointments', label: t('nav.appointments'), icon: Calendar },
+    { path: '/admin/feedbacks', label: t('nav.feedbacks'), icon: MessageSquare },
     { path: '/admin/users', label: t('nav.users'), icon: UserCog },
   ];
 

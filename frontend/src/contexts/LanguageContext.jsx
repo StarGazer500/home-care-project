@@ -16,6 +16,7 @@ const translations = {
       dashboard: 'Dashboard',
       contacts: 'Contacts',
       appointments: 'Appointments',
+      feedbacks: 'Feedbacks',
       users: 'Users',
     },
     // Hero Section
@@ -141,6 +142,24 @@ const translations = {
       testimonial1: 'The care my mother receives is exceptional. The staff is professional, caring, and truly makes a difference in her quality of life.',
       testimonial2: 'After my surgery, the home nursing service was invaluable. Professional, punctual, and compassionate care every visit.',
       testimonial3: "The cleaning service keeps my home spotless. It's such a relief to have reliable, thorough professionals I can trust.",
+    },
+    // Feedback
+    feedback: {
+      title: 'Share Your',
+      titleHighlight: 'Feedback',
+      subtitle: 'Help us improve by sharing your experience',
+      fullName: 'Your Name',
+      email: 'Email Address',
+      rating: 'Rating',
+      service: 'Service Used',
+      message: 'Your Feedback',
+      messagePlaceholder: 'Tell us about your experience...',
+      submit: 'Submit Feedback',
+      submitting: 'Submitting...',
+      success: 'Thank you for your feedback! We appreciate your input.',
+      error: 'Failed to submit feedback. Please try again.',
+      selectRating: 'Select a rating',
+      stars: 'stars',
     },
     // Footer
     footer: {
@@ -298,6 +317,7 @@ const translations = {
       dashboard: 'Hallintapaneeli',
       contacts: 'Yhteydenotot',
       appointments: 'Varaukset',
+      feedbacks: 'Palautteet',
       users: 'Käyttäjät',
     },
     // Hero Section
@@ -423,6 +443,24 @@ const translations = {
       testimonial1: 'Äitini saama hoito on poikkeuksellista. Henkilökunta on ammattimaista, huolehtivaa ja tekee todella eron hänen elämänlaatuunsa.',
       testimonial2: 'Leikkaukseni jälkeen kotisairaanhoito oli korvaamaton. Ammattimaista, täsmällistä ja myötätuntoista hoitoa joka käynnillä.',
       testimonial3: 'Siivouspalvelu pitää kotini moitteettomana. On helpotus, että voin luottaa luotettaviin ammattilaisiin.',
+    },
+    // Feedback
+    feedback: {
+      title: 'Jaa',
+      titleHighlight: 'palautteesi',
+      subtitle: 'Auta meitä parantamaan kertomalla kokemuksestasi',
+      fullName: 'Nimesi',
+      email: 'Sähköpostiosoite',
+      rating: 'Arvio',
+      service: 'Käytetty palvelu',
+      message: 'Palautteesi',
+      messagePlaceholder: 'Kerro kokemuksestasi...',
+      submit: 'Lähetä palaute',
+      submitting: 'Lähetetään...',
+      success: 'Kiitos palautteestasi! Arvostamme panostasi.',
+      error: 'Palautteen lähetys epäonnistui. Yritä uudelleen.',
+      selectRating: 'Valitse arvio',
+      stars: 'tähteä',
     },
     // Footer
     footer: {
@@ -580,6 +618,7 @@ const translations = {
       dashboard: 'Kontrollpanel',
       contacts: 'Kontakter',
       appointments: 'Bokningar',
+      feedbacks: 'Feedback',
       users: 'Användare',
     },
     // Hero Section
@@ -705,6 +744,24 @@ const translations = {
       testimonial1: 'Vården min mamma får är exceptionell. Personalen är professionell, omtänksam och gör verkligen skillnad i hennes livskvalitet.',
       testimonial2: 'Efter min operation var hemsjukvården ovärderlig. Professionell, punktlig och medkännande vård vid varje besök.',
       testimonial3: 'Städtjänsten håller mitt hem fläckfritt. Det är en sådan lättnad att ha pålitliga, noggranna yrkesmän jag kan lita på.',
+    },
+    // Feedback
+    feedback: {
+      title: 'Dela din',
+      titleHighlight: 'feedback',
+      subtitle: 'Hjälp oss förbättra genom att dela din upplevelse',
+      fullName: 'Ditt namn',
+      email: 'E-postadress',
+      rating: 'Betyg',
+      service: 'Använd tjänst',
+      message: 'Din feedback',
+      messagePlaceholder: 'Berätta om din upplevelse...',
+      submit: 'Skicka feedback',
+      submitting: 'Skickar...',
+      success: 'Tack för din feedback! Vi uppskattar ditt bidrag.',
+      error: 'Det gick inte att skicka feedback. Försök igen.',
+      selectRating: 'Välj ett betyg',
+      stars: 'stjärnor',
     },
     // Footer
     footer: {

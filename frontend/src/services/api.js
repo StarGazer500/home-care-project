@@ -309,6 +309,102 @@ export const api = {
     },
   },
 
+  // Feedbacks API
+  feedbacks: {
+    create: async (feedbackData) => {
+      const response = await fetch(`${API_BASE_URL}/feedbacks/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(feedbackData),
+      });
+      return handleResponse(response);
+    },
+
+    getPublished: async (skip = 0, limit = 10) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/published?skip=${skip}&limit=${limit}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    getAll: async (skip = 0, limit = 100) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/all?skip=${skip}&limit=${limit}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    getOne: async (id) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/get/${id}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    update: async (id, updateData) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/update/${id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(updateData),
+        }
+      );
+      return handleResponse(response);
+    },
+
+    togglePublish: async (id) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/toggle-publish/${id}`,
+        {
+          method: 'PATCH',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    delete: async (id) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/delete/${id}`,
+        {
+          method: 'DELETE',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+
+    searchByName: async (name) => {
+      const response = await fetch(
+        `${API_BASE_URL}/feedbacks/search?name=${encodeURIComponent(name)}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+      return handleResponse(response);
+    },
+  },
+
   // Users API (Admin only)
   users: {
     getAll: async (skip = 0, limit = 15) => {

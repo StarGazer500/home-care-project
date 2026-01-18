@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar } from 'lucide-react';
+import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import LanguageSelector from '../components/LanguageSelector';
@@ -24,6 +24,17 @@ function HomePage() {
   });
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Feedback form state
+  const [feedbackForm, setFeedbackForm] = useState({
+    full_name: '',
+    email: '',
+    rating: 5,
+    service_type: 'Home Care Services',
+    message: ''
+  });
+  const [feedbackStatus, setFeedbackStatus] = useState({ type: '', message: '' });
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,6 +100,40 @@ function HomePage() {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleFeedbackFormChange = (e) => {
+    const { name, value } = e.target;
+    setFeedbackForm(prev => ({ ...prev, [name]: name === 'rating' ? parseInt(value) : value }));
+    if (feedbackStatus.message) setFeedbackStatus({ type: '', message: '' });
+  };
+
+  const handleFeedbackFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmittingFeedback(true);
+    setFeedbackStatus({ type: '', message: '' });
+
+    try {
+      await api.feedbacks.create(feedbackForm);
+      setFeedbackStatus({
+        type: 'success',
+        message: t('feedback.success')
+      });
+      setFeedbackForm({
+        full_name: '',
+        email: '',
+        rating: 5,
+        service_type: 'Home Care Services',
+        message: ''
+      });
+    } catch (error) {
+      setFeedbackStatus({
+        type: 'error',
+        message: error.message || t('feedback.error')
+      });
+    } finally {
+      setIsSubmittingFeedback(false);
     }
   };
 
@@ -554,8 +599,129 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Feedback Section */}
+      <section id="feedback" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl mb-6 shadow-lg">
+              <MessageSquare className="text-white" size={32} />
+            </div>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
+              {t('feedback.title')} <span className="text-red-500">{t('feedback.titleHighlight')}</span>
+            </h2>
+            <p className="text-xl text-slate-600">
+              {t('feedback.subtitle')}
+            </p>
+          </div>
+
+          <div className="bg-slate-50 rounded-3xl p-8">
+            <form onSubmit={handleFeedbackFormSubmit} className="space-y-6">
+              {feedbackStatus.message && (
+                <div className={`p-4 rounded-2xl ${
+                  feedbackStatus.type === 'success'
+                    ? 'bg-green-50 border-2 border-green-200 text-green-800'
+                    : 'bg-red-50 border-2 border-red-200 text-red-800'
+                }`}>
+                  {feedbackStatus.message}
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('feedback.fullName')}</label>
+                  <input
+                    type="text"
+                    name="full_name"
+                    value={feedbackForm.full_name}
+                    onChange={handleFeedbackFormChange}
+                    className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('feedback.email')}</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={feedbackForm.email}
+                    onChange={handleFeedbackFormChange}
+                    className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('feedback.service')}</label>
+                  <select
+                    name="service_type"
+                    value={feedbackForm.service_type}
+                    onChange={handleFeedbackFormChange}
+                    className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors"
+                  >
+                    <option value="Home Care Services">{t('services.homeCare')}</option>
+                    <option value="Home Nursing">{t('services.nursing')}</option>
+                    <option value="Home Cleaning">{t('services.cleaning')}</option>
+                    <option value="Palliative Care">{t('services.palliative')}</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('feedback.rating')}</label>
+                  <div className="flex items-center space-x-2 bg-white rounded-2xl px-4 py-3 border-2 border-white">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setFeedbackForm(prev => ({ ...prev, rating: star }))}
+                        className="focus:outline-none transition-transform hover:scale-110"
+                      >
+                        <Star
+                          size={28}
+                          className={`${
+                            star <= feedbackForm.rating
+                              ? 'text-yellow-400 fill-yellow-400'
+                              : 'text-slate-300'
+                          }`}
+                        />
+                      </button>
+                    ))}
+                    <span className="ml-2 text-sm text-slate-600">
+                      {feedbackForm.rating} {t('feedback.stars')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2" style={{color: '#1e3a5f'}}>{t('feedback.message')}</label>
+                <textarea
+                  name="message"
+                  value={feedbackForm.message}
+                  onChange={handleFeedbackFormChange}
+                  rows="4"
+                  className="w-full px-4 py-3 rounded-2xl border-2 border-white bg-white focus:border-red-500 focus:outline-none transition-colors resize-none"
+                  placeholder={t('feedback.messagePlaceholder')}
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmittingFeedback}
+                className="w-full px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:shadow-xl transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmittingFeedback ? t('feedback.submitting') : t('feedback.submit')}
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="space-y-8">
