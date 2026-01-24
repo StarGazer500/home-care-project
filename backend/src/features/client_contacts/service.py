@@ -36,7 +36,7 @@ class ClientContactInformationService:
         return await self.repository.search_by_name(name)
     
     async def get_all_client_contact_informations(self,skip: int = 0, limit: int=100)-> List[ClientContactInformation]:
-        return await self.repository.get_multi(skip=skip,limit=limit)
+        return await self.repository.get_all_client_contacts(skip=skip,limit=limit)
     
     async def delete_client_contact_information(self,client_contact_id)->bool:
         return await self.repository.delete(client_contact_id)

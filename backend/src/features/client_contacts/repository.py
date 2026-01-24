@@ -31,3 +31,9 @@ class ClientContactInformationRepository(BaseRepository[ClientContactInformation
         statement = select(ClientContactInformation).where(ClientContactInformation.phone == phone)
         result = await self.session.execute(statement)
         return result.scalar_one_or_none()
+    
+    async def get_all_client_contacts(self, skip: int = 0, limit: int = 100) -> List[ClientContactInformation]:
+        """Get appointments for a specific user"""
+        statement = select(ClientContactInformation).offset(skip).limit(limit).order_by(ClientContactInformation.created_at.desc())
+        result = await self.session.execute(statement)
+        return result.scalars().all()

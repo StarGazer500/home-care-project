@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Optional
+from typing import Optional,List
 from src.features.accounts.models import User
 from src.shared.repositories.base import BaseRepository
 
@@ -19,5 +19,11 @@ class UserRepository(BaseRepository[User]):
         statement = select(User).where(User.username == username)
         result = await self.session.execute(statement)
         return result.scalar_one_or_none()
+    
+    async def get_all_users(self, skip: int = 0, limit: int = 100) -> List[User]:
+        """Get appointments for a specific user"""
+        statement = select(User).offset(skip).limit(limit).order_by(User.created_at.desc())
+        result = await self.session.execute(statement)
+        return result.scalars().all()
     
    

@@ -33,7 +33,7 @@ class FeedbackService:
         return await self.repository.delete(feedback_id)
 
     async def get_all_feedbacks(self, skip: int = 0, limit: int = 100) -> List[Feedback]:
-        return await self.repository.get_multi(skip=skip, limit=limit)
+        return await self.repository.get_all_feedbacks(skip=skip, limit=limit)
 
     async def get_published_feedbacks(self, skip: int = 0, limit: int = 100) -> List[Feedback]:
         return await self.repository.get_published(skip=skip, limit=limit)

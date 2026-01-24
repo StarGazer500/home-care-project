@@ -39,7 +39,7 @@ class AppointmentRepository(BaseRepository[Appointment]):
         """Get appointments for a specific user"""
         statement = select(Appointment).where(
             Appointment.user_id == user_id
-        ).offset(skip).limit(limit).order_by(Appointment.created_at.desc())
+        ).offset(skip).limit(limit).order_by(Appointment.appointment_date.desc())
         result = await self.session.execute(statement)
         return result.scalars().all()
 
@@ -50,3 +50,9 @@ class AppointmentRepository(BaseRepository[Appointment]):
         )
         result = await self.session.execute(statement)
         return result.scalar_one()
+    
+    async def get_all_appointments(self, skip: int = 0, limit: int = 100) -> List[Appointment]:
+        """Get appointments for a specific user"""
+        statement = select(Appointment).offset(skip).limit(limit).order_by(Appointment.appointment_date.desc())
+        result = await self.session.execute(statement)
+        return result.scalars().all()

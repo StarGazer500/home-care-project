@@ -99,7 +99,7 @@ async def get_all_users(
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
 
-    users = await service.repository.get_multi(skip=skip, limit=limit)
+    users = await service.repository.get_all_users(skip=skip, limit=limit)
     total = await service.repository.count()
 
     return {

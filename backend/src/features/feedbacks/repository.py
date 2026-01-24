@@ -41,3 +41,9 @@ class FeedbackRepository(BaseRepository[Feedback]):
         statement = select(func.count()).select_from(Feedback).where(Feedback.is_published == True)
         result = await self.session.execute(statement)
         return result.scalar_one()
+    
+    async def get_all_feedbacks(self, skip: int = 0, limit: int = 100) -> List[Feedback]:
+        """Get appointments for a specific user"""
+        statement = select(Feedback).offset(skip).limit(limit).order_by(Feedback.created_at.desc())
+        result = await self.session.execute(statement)
+        return result.scalars().all()

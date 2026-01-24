@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare } from 'lucide-react';
+import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import LanguageSelector from '../components/LanguageSelector';
@@ -177,12 +177,21 @@ function HomePage() {
       features: [t('services.palliativeFeature1') || '24/7 care options', t('services.palliativeFeature2') || 'Pain management', t('services.palliativeFeature3') || 'Emotional support', t('services.palliativeFeature4') || 'Family counseling'],
       price: t('services.customPricing') || 'Custom pricing',
       color: 'bg-rose-50 border-rose-200'
+    },
+    {
+      id: 'personal-assistant',
+      icon: UserCheck,
+      title: t('services.personalAssistant') || 'Personal Assistant',
+      subtitle: t('services.personalAssistantSubtitle') || 'Your dedicated helper',
+      description: t('services.personalAssistantDesc') || 'Personalized assistance for errands, appointments, shopping, and daily tasks to help you maintain independence.',
+      features: [t('services.personalAssistantFeature1') || 'Errand running', t('services.personalAssistantFeature2') || 'Appointment accompaniment', t('services.personalAssistantFeature3') || 'Shopping assistance', t('services.personalAssistantFeature4') || 'Administrative help'],
+      price: `${t('services.from')} €35/${t('services.hour')}`,
+      color: 'bg-purple-50 border-purple-200'
     }
   ];
 
   const getStats = () => [
-    { icon: Users, value: '2,500+', label: t('hero.happyClients') },
-    { icon: Award, value: '15+', label: t('hero.yearsExperience') },
+   
     { icon: Clock, value: '24/7', label: t('hero.availability') },
     { icon: Shield, value: '100%', label: t('hero.licensedStaff') }
   ];
@@ -190,28 +199,9 @@ function HomePage() {
   const services = getServices();
   const stats = getStats();
 
-  const getTestimonials = () => [
-    {
-      name: 'Maria Korhonen',
-      role: t('testimonials.familyMember'),
-      text: t('testimonials.testimonial1'),
-      rating: 5
-    },
-    {
-      name: 'Jukka Virtanen',
-      role: t('testimonials.client'),
-      text: t('testimonials.testimonial2'),
-      rating: 5
-    },
-    {
-      name: 'Anna Nieminen',
-      role: t('testimonials.client'),
-      text: t('testimonials.testimonial3'),
-      rating: 5
-    }
-  ];
+  
 
-  const testimonials = getTestimonials();
+  
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
@@ -238,6 +228,8 @@ function HomePage() {
               <a href="#services" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.services')}</a>
               <a href="#about" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
               <a href="#pricing" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.pricing')}</a>
+              <a href="#feedback" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.feedback') || 'Feedback'}</a>
+              <a href="#contact" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.contact') || 'Contact'}</a>
               <Link to="/appointments" className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
                 <Calendar size={18} />
                 <span>{t('nav.book')}</span>
@@ -263,19 +255,27 @@ function HomePage() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-slate-200">
+          <div className="md:hidden bg-white border-t border-slate-200 max-h-[80vh] overflow-y-auto">
             <div className="px-4 py-6 space-y-4">
-              <a href="#services" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.services')}</a>
-              <a href="#about" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
-              <a href="#pricing" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.pricing')}</a>
-              <Link to="/appointments" className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
+              <a href="#services" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.services')}</a>
+              <a href="#about" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
+              <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.pricing')}</a>
+              <a href="#feedback" onClick={() => setIsMenuOpen(false)} className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
+                <MessageSquare size={18} />
+                <span>{t('nav.feedback') || 'Share Feedback'}</span>
+              </a>
+              <a href="#contact" onClick={() => setIsMenuOpen(false)} className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
+                <Phone size={18} />
+                <span>{t('nav.contact') || 'Contact Us'}</span>
+              </a>
+              <Link to="/appointments" onClick={() => setIsMenuOpen(false)} className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
                 <Calendar size={18} />
                 <span>{t('hero.bookAppointment')}</span>
               </Link>
-              <Link to="/login" className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
+              <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
                 {t('nav.login')}
               </Link>
-              <Link to="/register" className="block bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-full text-center font-medium">
+              <Link to="/register" onClick={() => setIsMenuOpen(false)} className="block bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-full text-center font-medium">
                 {t('nav.signup')}
               </Link>
               <div className="pt-4 border-t border-slate-200">
@@ -287,106 +287,109 @@ function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-100 to-white">
+      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-100 to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-6">
-               
-                <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight" style={{color: '#1e3a5f'}}>
+          <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-6 sm:space-y-8">
+              <div className="space-y-4 sm:space-y-6 text-center lg:text-left">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{color: '#1e3a5f'}}>
                   {t('hero.title1')}
                   <br />
                   <span className="text-red-500">{t('hero.title2')}</span>
                 </h1>
-                <p className="text-xl text-slate-600 leading-relaxed">
+                <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   {t('hero.subtitle')}
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
                 <a
                   href="#services"
-                  className="px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:shadow-xl transition-all font-semibold inline-flex items-center space-x-2"
+                  className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full hover:shadow-xl transition-all font-semibold inline-flex items-center justify-center space-x-2"
                 >
                   <span>{t('hero.ourServices')}</span>
                   <ChevronRight size={20} />
                 </a>
                 <a
                   href="#contact"
-                  className="px-8 py-4 border-2 border-red-500 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all font-semibold"
+                  className="px-6 sm:px-8 py-3 sm:py-4 border-2 border-red-500 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all font-semibold text-center"
                 >
                   {t('hero.getInTouch')}
                 </a>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t-2 border-slate-200">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t-2 border-slate-200">
                 {stats.map((stat, idx) => (
                   <div key={idx} className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-full mb-2 text-white shadow-lg">
-                      <stat.icon size={24} />
+                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-full mb-2 text-white shadow-lg">
+                      <stat.icon size={20} className="sm:hidden" />
+                      <stat.icon size={24} className="hidden sm:block" />
                     </div>
-                    <div className="font-display text-3xl font-bold" style={{color: '#1e3a5f'}}>{stat.value}</div>
-                    <div className="text-sm text-slate-600">{stat.label}</div>
+                    <div className="font-display text-2xl sm:text-3xl font-bold" style={{color: '#1e3a5f'}}>{stat.value}</div>
+                    <div className="text-xs sm:text-sm text-slate-600">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="relative">
-              <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative w-full max-w-md lg:max-w-none mx-auto">
+              <div className="relative z-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] sm:aspect-[3/4] lg:aspect-auto">
                 <img
-                  src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&h=1000&fit=crop"
-                  alt="Healthcare professional"
+                  src="https://images.unsplash.com/photo-1576765608622-067973a79f53?w=800&h=600&fit=crop"
+                  alt="Caring healthcare professional with elderly patient"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-red-200 rounded-full -z-10 blur-2xl opacity-60" />
-              <div className="absolute -top-6 -left-6 w-32 h-32 bg-cyan-200 rounded-full -z-10 blur-2xl opacity-60" />
+              <div className="hidden sm:block absolute -bottom-6 -right-6 w-48 h-48 bg-red-200 rounded-full -z-10 blur-2xl opacity-60" />
+              <div className="hidden sm:block absolute -top-6 -left-6 w-32 h-32 bg-cyan-200 rounded-full -z-10 blur-2xl opacity-60" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="services" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4" style={{color: '#1e3a5f'}}>
               {t('services.title')}
             </h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-lg sm:text-xl text-slate-600">
               {t('services.subtitle')}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {services.map((service, idx) => (
               <div
                 key={service.id}
-                className={`${service.color} border-2 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer`}
+                className={`${service.color} border-2 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 cursor-pointer active:scale-[0.98]`}
                 onClick={() => setActiveService(activeService === service.id ? null : service.id)}
               >
-                <div className="flex items-start space-x-4 mb-6">
-                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
-                    <service.icon size={32} className="text-red-500" />
+                <div className="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+                    <service.icon size={24} className="text-red-500 sm:hidden" />
+                    <service.icon size={28} className="text-red-500 hidden sm:block lg:hidden" />
+                    <service.icon size={32} className="text-red-500 hidden lg:block" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-display text-2xl font-bold mb-1" style={{color: '#1e3a5f'}}>{service.title}</h3>
-                    <p className="text-sm text-slate-600">{service.subtitle}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display text-lg sm:text-xl lg:text-2xl font-bold mb-1 truncate" style={{color: '#1e3a5f'}}>{service.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600">{service.subtitle}</p>
                   </div>
                 </div>
-                <p className="text-slate-700 leading-relaxed mb-4">{service.description}</p>
+                <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-3 sm:mb-4 line-clamp-3">{service.description}</p>
 
                 {activeService === service.id && (
-                  <div className="space-y-3 pt-4 border-t-2 border-white">
+                  <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-4 border-t-2 border-white animate-fadeInUp">
                     {service.features.map((feature, fIdx) => (
-                      <div key={fIdx} className="flex items-center space-x-2 text-sm">
-                        <Check size={16} className="text-red-500 flex-shrink-0" />
+                      <div key={fIdx} className="flex items-center space-x-2 text-xs sm:text-sm">
+                        <Check size={14} className="text-red-500 flex-shrink-0 sm:hidden" />
+                        <Check size={16} className="text-red-500 flex-shrink-0 hidden sm:block" />
                         <span className="text-slate-700">{feature}</span>
                       </div>
                     ))}
-                    <div className="mt-4 px-4 py-3 bg-white rounded-xl text-center font-bold text-red-500 shadow-sm">
+                    <div className="mt-3 sm:mt-4 px-3 sm:px-4 py-2 sm:py-3 bg-white rounded-lg sm:rounded-xl text-center font-bold text-red-500 shadow-sm text-sm sm:text-base">
                       {service.price}
                     </div>
                   </div>
@@ -398,44 +401,44 @@ function HomePage() {
       </section>
 
       {/* About/Values Section */}
-      <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+      <section id="about" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4" style={{color: '#1e3a5f'}}>
               {t('about.whyChooseUs')}
             </h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-lg sm:text-xl text-slate-600">
               {t('about.commitment')}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-3xl p-8 shadow-sm">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                <Heart className="text-white" size={32} />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg">
+                <Heart className="text-white" size={24} />
               </div>
-              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>{t('about.compassionateCare')}</h3>
-              <p className="text-slate-600 leading-relaxed">
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{color: '#1e3a5f'}}>{t('about.compassionateCare')}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 {t('about.compassionateCareDesc')}
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-8 shadow-sm">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                <Shield className="text-white" size={32} />
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg">
+                <Shield className="text-white" size={24} />
               </div>
-              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>{t('about.licensedProfessionals')}</h3>
-              <p className="text-slate-600 leading-relaxed">
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{color: '#1e3a5f'}}>{t('about.licensedProfessionals')}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 {t('about.licensedProfessionalsDesc')}
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-8 shadow-sm">
-              <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                <Clock className="text-white" size={32} />
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg">
+                <Clock className="text-white" size={24} />
               </div>
-              <h3 className="font-display text-2xl font-bold mb-3" style={{color: '#1e3a5f'}}>{t('about.alwaysAvailable')}</h3>
-              <p className="text-slate-600 leading-relaxed">
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{color: '#1e3a5f'}}>{t('about.alwaysAvailable')}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 {t('about.alwaysAvailableDesc')}
               </p>
             </div>
@@ -444,177 +447,170 @@ function HomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="pricing" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4" style={{color: '#1e3a5f'}}>
               {t('pricing.title')} <span className="text-red-500">{t('pricing.titleHighlight')}</span>
             </h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-lg sm:text-xl text-slate-600">
               {t('pricing.subtitle')}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {/* Home Care */}
-            <div className="bg-cyan-50 border-2 border-cyan-200 rounded-3xl p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                  <Home className="text-cyan-600" size={24} />
+            <div className="bg-cyan-50 border-2 border-cyan-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
+                  <Home className="text-cyan-600" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.homeCare')}</h3>
-                  <p className="text-sm text-slate-600">{t('pricing.homeCareSubtitle')}</p>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.homeCare')}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.homeCareSubtitle')}</p>
                 </div>
               </div>
-              <div className="mb-6">
-                <div className="font-display text-4xl font-bold text-red-500 mb-2">€32<span className="text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-sm text-slate-600">{t('pricing.homeCareRate')}</p>
+              <div className="mb-4 sm:mb-6">
+                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€32<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.homeCareRate')}</p>
               </div>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature1')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature2')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature3')}</li>
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature1')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature2')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature3')}</li>
               </ul>
             </div>
 
             {/* Nursing */}
-            <div className="bg-red-50 border-2 border-red-200 rounded-3xl p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                  <Stethoscope className="text-red-500" size={24} />
+            <div className="bg-red-50 border-2 border-red-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
+                  <Stethoscope className="text-red-500" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.nursing')}</h3>
-                  <p className="text-sm text-slate-600">{t('pricing.nursingSubtitle')}</p>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.nursing')}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.nursingSubtitle')}</p>
                 </div>
               </div>
-              <div className="mb-6">
-                <div className="font-display text-4xl font-bold text-red-500 mb-2">€59<span className="text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-sm text-slate-600">{t('pricing.nursingRate')}</p>
+              <div className="mb-4 sm:mb-6">
+                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€59<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.nursingRate')}</p>
               </div>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature1')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature2')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature3')}</li>
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature1')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature2')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature3')}</li>
               </ul>
             </div>
 
             {/* Cleaning */}
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-3xl p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                  <Sparkles className="text-blue-600" size={24} />
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
+                  <Sparkles className="text-blue-600" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.cleaning')}</h3>
-                  <p className="text-sm text-slate-600">{t('pricing.cleaningSubtitle')}</p>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.cleaning')}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.cleaningSubtitle')}</p>
                 </div>
               </div>
-              <div className="mb-6">
-                <div className="font-display text-4xl font-bold text-red-500 mb-2">€37.82<span className="text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-sm text-slate-600">{t('pricing.cleaningRate')}</p>
+              <div className="mb-4 sm:mb-6">
+                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€37.82<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.cleaningRate')}</p>
               </div>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature1')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature2')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature3')}</li>
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature1')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature2')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature3')}</li>
               </ul>
             </div>
 
             {/* Palliative */}
-            <div className="bg-rose-50 border-2 border-rose-200 rounded-3xl p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                  <Heart className="text-red-500" size={24} />
+            <div className="bg-rose-50 border-2 border-rose-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
+                  <Heart className="text-red-500" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.palliative')}</h3>
-                  <p className="text-sm text-slate-600">{t('pricing.palliativeSubtitle')}</p>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.palliative')}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.palliativeSubtitle')}</p>
                 </div>
               </div>
-              <div className="mb-6">
-                <div className="font-display text-3xl font-bold text-red-500 mb-2">{t('pricing.customQuote')}</div>
-                <p className="text-sm text-slate-600">{t('pricing.palliativeRate')}</p>
+              <div className="mb-4 sm:mb-6">
+                <div className="font-display text-2xl sm:text-3xl font-bold text-red-500 mb-1 sm:mb-2">{t('pricing.customQuote')}</div>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.palliativeRate')}</p>
               </div>
-              <ul className="space-y-3 text-sm text-slate-700">
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature1')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature2')}</li>
-                <li className="flex items-start"><Check size={16} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature3')}</li>
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature1')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature2')}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature3')}</li>
+              </ul>
+            </div>
+
+            {/* Personal Assistant */}
+            <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow sm:col-span-2">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
+                  <UserCheck className="text-purple-600" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.personalAssistant') || 'Personal Assistant'}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.personalAssistantSubtitle') || 'Your dedicated helper'}</p>
+                </div>
+              </div>
+              <div className="mb-4 sm:mb-6">
+                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€35<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.personalAssistantRate') || 'Personalized assistance services'}</p>
+              </div>
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.personalAssistantFeature1') || 'Errand running'}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.personalAssistantFeature2') || 'Appointment accompaniment'}</li>
+                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.personalAssistantFeature3') || 'Shopping assistance'}</li>
               </ul>
             </div>
           </div>
 
           {/* Additional Info */}
-          <div className="mt-12 bg-slate-50 rounded-3xl p-8">
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div>
-                <div className="text-2xl mb-2">✓</div>
-                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>{t('pricing.serviceVouchers')}</h4>
-                <p className="text-sm text-slate-600">{t('pricing.serviceVouchersDesc')}</p>
+          <div className="mt-8 sm:mt-12 bg-slate-50 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
+              <div className="p-3 sm:p-0">
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</div>
+                <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricing.serviceVouchers')}</h4>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.serviceVouchersDesc')}</p>
               </div>
-              <div>
-                <div className="text-2xl mb-2">✓</div>
-                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>{t('pricing.flexiblePlans')}</h4>
-                <p className="text-sm text-slate-600">{t('pricing.flexiblePlansDesc')}</p>
+              <div className="p-3 sm:p-0">
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</div>
+                <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricing.flexiblePlans')}</h4>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.flexiblePlansDesc')}</p>
               </div>
-              <div>
-                <div className="text-2xl mb-2">✓</div>
-                <h4 className="font-bold mb-2" style={{color: '#1e3a5f'}}>{t('pricing.noHiddenFees')}</h4>
-                <p className="text-sm text-slate-600">{t('pricing.noHiddenFeesDesc')}</p>
+              <div className="p-3 sm:p-0">
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</div>
+                <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricing.noHiddenFees')}</h4>
+                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.noHiddenFeesDesc')}</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
-              {t('testimonials.title')} <span className="text-red-500">{t('testimonials.titleHighlight')}</span>
-            </h2>
-            <p className="text-xl text-slate-600">
-              {t('testimonials.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-8 shadow-sm">
-                <div className="flex space-x-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} size={20} className="text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-slate-700 leading-relaxed mb-6 italic">"{testimonial.text}"</p>
-                <div className="border-t-2 border-slate-100 pt-4">
-                  <div className="font-bold" style={{color: '#1e3a5f'}}>{testimonial.name}</div>
-                  <div className="text-sm text-slate-600">{testimonial.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+     
 
       {/* Feedback Section */}
-      <section id="feedback" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="feedback" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl mb-6 shadow-lg">
-              <MessageSquare className="text-white" size={32} />
+          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 shadow-lg">
+              <MessageSquare className="text-white" size={24} />
             </div>
-            <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4" style={{color: '#1e3a5f'}}>
               {t('feedback.title')} <span className="text-red-500">{t('feedback.titleHighlight')}</span>
             </h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-lg sm:text-xl text-slate-600">
               {t('feedback.subtitle')}
             </p>
           </div>
 
-          <div className="bg-slate-50 rounded-3xl p-8">
+          <div className="bg-slate-50 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8">
             <form onSubmit={handleFeedbackFormSubmit} className="space-y-6">
               {feedbackStatus.message && (
                 <div className={`p-4 rounded-2xl ${
@@ -665,6 +661,7 @@ function HomePage() {
                     <option value="Home Nursing">{t('services.nursing')}</option>
                     <option value="Home Cleaning">{t('services.cleaning')}</option>
                     <option value="Palliative Care">{t('services.palliative')}</option>
+                    <option value="Palliative Care">{t('services.personalAssistant')}</option>
                   </select>
                 </div>
 
@@ -721,60 +718,60 @@ function HomePage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+      <section id="contact" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <div>
-                <h2 className="font-display text-4xl sm:text-5xl font-bold mb-4" style={{color: '#1e3a5f'}}>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            <div className="space-y-6 sm:space-y-8">
+              <div className="text-center lg:text-left">
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4" style={{color: '#1e3a5f'}}>
                   {t('contact.title')}
                 </h2>
-                <p className="text-xl text-slate-600">
+                <p className="text-lg sm:text-xl text-slate-600">
                   {t('contact.subtitle')}
                 </p>
               </div>
 
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Phone className="text-white" size={20} />
+              <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                <div className="flex items-start space-x-3 sm:space-x-4 bg-white rounded-xl sm:rounded-2xl p-4 shadow-sm">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Phone className="text-white" size={18} />
                   </div>
                   <div>
-                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>{t('contact.phone')}</div>
-                    <a href="tel:+358961500069" className="text-slate-600 hover:text-red-500 transition-colors">
+                    <div className="font-bold mb-1 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('contact.phone')}</div>
+                    <a href="tel:+358961500069" className="text-slate-600 hover:text-red-500 transition-colors text-sm sm:text-base">
                       +358 (09) 615 000 69
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Mail className="text-white" size={20} />
+                <div className="flex items-start space-x-3 sm:space-x-4 bg-white rounded-xl sm:rounded-2xl p-4 shadow-sm">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Mail className="text-white" size={18} />
                   </div>
                   <div>
-                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>{t('contact.email')}</div>
-                    <a href="mailto:info@bridgehoito.fi" className="text-slate-600 hover:text-red-500 transition-colors">
+                    <div className="font-bold mb-1 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('contact.email')}</div>
+                    <a href="mailto:info@bridgehoito.fi" className="text-slate-600 hover:text-red-500 transition-colors text-sm sm:text-base break-all">
                       info@bridgehoito.fi
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <MapPin className="text-white" size={20} />
+                <div className="flex items-start space-x-3 sm:space-x-4 bg-white rounded-xl sm:rounded-2xl p-4 shadow-sm sm:col-span-2 lg:col-span-1">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <MapPin className="text-white" size={18} />
                   </div>
                   <div>
-                    <div className="font-bold mb-1" style={{color: '#1e3a5f'}}>{t('contact.serviceArea')}</div>
-                    <p className="text-slate-600">
+                    <div className="font-bold mb-1 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('contact.serviceArea')}</div>
+                    <p className="text-slate-600 text-sm sm:text-base">
                       {t('contact.serviceAreaText')}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-slate-50 rounded-3xl p-6">
-                <h3 className="font-bold mb-4" style={{color: '#1e3a5f'}}>{t('contact.officeHours')}</h3>
-                <div className="space-y-2 text-sm text-slate-700">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm">
+                <h3 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('contact.officeHours')}</h3>
+                <div className="space-y-2 text-xs sm:text-sm text-slate-700">
                   <div className="flex justify-between">
                     <span>{t('contact.mondayFriday')}</span>
                     <span className="font-medium">8:00 - 20:00</span>
@@ -791,7 +788,7 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="bg-slate-50 rounded-3xl p-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-sm">
               <form onSubmit={handleContactFormSubmit} className="space-y-6">
                 {formStatus.message && (
                   <div className={`p-4 rounded-2xl ${
@@ -851,6 +848,7 @@ function HomePage() {
                     <option value="Home Nursing">{t('services.nursing')}</option>
                     <option value="Home Cleaning">{t('services.cleaning')}</option>
                     <option value="Palliative Care">{t('services.palliative')}</option>
+                    <option value="Palliative Care">{t('services.personalAssistant')}</option>
                   </select>
                 </div>
 
@@ -892,28 +890,28 @@ function HomePage() {
       )}
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-slate-800 to-slate-900 text-slate-300 py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gradient-to-br from-slate-800 to-slate-900 text-slate-300 py-10 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-white shadow-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8">
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center space-x-3 mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center overflow-hidden bg-white shadow-lg">
                   <img
                     src="/logo.jpeg"
                     alt="Bridge Hoito Oy Logo"
                     className="w-full h-full object-cover scale-110"
                   />
                 </div>
-                <span className="font-display text-xl font-bold text-white">Bridge Hoito Oy</span>
+                <span className="font-display text-lg sm:text-xl font-bold text-white">Bridge Hoito Oy</span>
               </div>
-              <p className="text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-400">
                 {t('footer.description')}
               </p>
             </div>
 
             <div>
-              <h3 className="font-bold text-white mb-4">{t('footer.services')}</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-bold text-white mb-3 sm:mb-4 text-sm sm:text-base">{t('footer.services')}</h3>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                 <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.homeCare')}</a></li>
                 <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.nursing')}</a></li>
                 <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.cleaning')}</a></li>
@@ -922,8 +920,8 @@ function HomePage() {
             </div>
 
             <div>
-              <h3 className="font-bold text-white mb-4">{t('footer.company')}</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-bold text-white mb-3 sm:mb-4 text-sm sm:text-base">{t('footer.company')}</h3>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                 <li><a href="#about" className="hover:text-red-400 transition-colors">{t('footer.aboutUs')}</a></li>
                 <li><a href="#" className="hover:text-red-400 transition-colors">{t('footer.careers')}</a></li>
                 <li><a href="#" className="hover:text-red-400 transition-colors">{t('footer.privacy')}</a></li>
@@ -931,23 +929,23 @@ function HomePage() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="font-bold text-white mb-4">{t('footer.stayUpdated')}</h3>
-              <p className="text-sm text-slate-400 mb-3">{t('footer.healthTips')}</p>
+            <div className="col-span-2 md:col-span-1">
+              <h3 className="font-bold text-white mb-3 sm:mb-4 text-sm sm:text-base">{t('footer.stayUpdated')}</h3>
+              <p className="text-xs sm:text-sm text-slate-400 mb-2 sm:mb-3">{t('footer.healthTips')}</p>
               <div className="flex space-x-2">
                 <input
                   type="email"
                   placeholder={t('footer.yourEmail')}
-                  className="flex-1 px-4 py-2 rounded-full bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:border-red-400"
+                  className="flex-1 min-w-0 px-3 sm:px-4 py-2 rounded-full bg-slate-700 border border-slate-600 text-white text-xs sm:text-sm focus:outline-none focus:border-red-400"
                 />
-                <button className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full hover:shadow-lg transition-all">
-                  <ChevronRight size={20} />
+                <button className="px-3 sm:px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full hover:shadow-lg transition-all flex-shrink-0">
+                  <ChevronRight size={18} />
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-slate-700 text-center text-sm text-slate-400">
+          <div className="pt-6 sm:pt-8 border-t border-slate-700 text-center text-xs sm:text-sm text-slate-400">
             <p>© 2025 Bridge Hoito Oy. {t('footer.rights')}</p>
           </div>
         </div>

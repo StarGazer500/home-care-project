@@ -53,6 +53,7 @@ function LoginPage() {
         {/* Logo and Header */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-3 mb-6">
+          <Link to="/" className="flex items-center space-x-4 hover:opacity-80 transition-opacity">
             <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden bg-white shadow-lg border-2 border-slate-200">
               <img
                 src="/logo.jpeg"
@@ -60,6 +61,7 @@ function LoginPage() {
                 className="w-full h-full object-cover scale-110"
               />
             </div>
+            </Link>
           </div>
           <h2 className="font-display text-3xl font-bold text-navy-900 mb-2" style={{color: '#1e3a5f'}}>
             {t('auth.welcomeBack')}

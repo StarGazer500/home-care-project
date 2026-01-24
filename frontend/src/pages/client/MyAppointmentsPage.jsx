@@ -165,7 +165,12 @@ function MyAppointmentsPage() {
     }else if (serviceName==='Companionship'){
       return 'companionship'
       
+    }else if (serviceName==='Personal Assistant'){
+      return 'personalAssistant'
+      
     }
+
+
 
     else if (serviceName==='Other'){
        return 'other'
@@ -199,7 +204,9 @@ function MyAppointmentsPage() {
     'Nursing Care',
     'Personal Care',
     'Companionship',
+    'Personal Assistant',
     'Other',
+    
   ];
 
   // Generate time slots from 8 AM to 8 PM in 30-minute intervals

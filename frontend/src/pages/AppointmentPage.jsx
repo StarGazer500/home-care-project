@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { Calendar, Clock, User, Mail, Phone, FileText, CheckCircle, MapPin, AlertCircle, X } from 'lucide-react';
 import { api } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -47,6 +47,7 @@ function AppointmentPage() {
     { value: 'Nursing Care', label: t('appointments.nursingCare') },
     { value: 'Personal Care', label: t('appointments.personalCare') },
     { value: 'Companionship', label: t('appointments.companionship') },
+    { value: 'Personal Assistant', label: t('appointments.personalAssistant') },
     { value: 'Other', label: t('appointments.other') },
   ];
 
@@ -125,6 +126,20 @@ function AppointmentPage() {
         <LanguageSelector variant="compact" />
       </div>
       <div className="max-w-3xl mx-auto">
+
+         
+         <div className="flex items-center justify-center space-x-3 mb-6">
+          <Link to="/" className="flex items-center space-x-4 hover:opacity-80 transition-opacity">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden bg-white shadow-lg border-2 border-slate-200">
+              <img
+                src="/logo.jpeg"
+                alt="Bridge Hoito Oy Logo"
+                className="w-full h-full object-cover scale-110"
+              />
+            </div>
+            </Link>
+          </div>
+          
     
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#1e3a5f' }}>

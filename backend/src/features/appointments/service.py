@@ -66,7 +66,7 @@ class AppointmentService:
         return await self.repository.delete(appointment_id)
 
     async def get_all_appointments(self, skip: int = 0, limit: int = 100) -> List[Appointment]:
-        return await self.repository.get_multi(skip=skip, limit=limit)
+        return await self.repository.get_all_appointments(skip=skip, limit=limit)
 
     async def get_appointments_by_date(self, appointment_date: date) -> List[Appointment]:
         return await self.repository.get_by_date(appointment_date)
