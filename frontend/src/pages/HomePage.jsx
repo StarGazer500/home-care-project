@@ -231,7 +231,7 @@ function HomePage() {
               <a href="#feedback" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.feedback') || 'Feedback'}</a>
               <a href="#contact" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.contact') || 'Contact'}</a>
               <Link to="/appointments" className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
-                <Calendar size={18} />
+                {/* <Calendar size={18} /> */}
                 <span>{t('nav.book')}</span>
               </Link>
               <Link to="/login" className="text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
@@ -261,15 +261,15 @@ function HomePage() {
               <a href="#about" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
               <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.pricing')}</a>
               <a href="#feedback" onClick={() => setIsMenuOpen(false)} className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
-                <MessageSquare size={18} />
+                {/* <MessageSquare size={18} /> */}
                 <span>{t('nav.feedback') || 'Share Feedback'}</span>
               </a>
               <a href="#contact" onClick={() => setIsMenuOpen(false)} className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
-                <Phone size={18} />
+                {/* <Phone size={18} /> */}
                 <span>{t('nav.contact') || 'Contact Us'}</span>
               </a>
               <Link to="/appointments" onClick={() => setIsMenuOpen(false)} className="flex items-center space-x-2 text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
-                <Calendar size={18} />
+                {/* <Calendar size={18} /> */}
                 <span>{t('hero.bookAppointment')}</span>
               </Link>
               <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>
