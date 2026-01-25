@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare, UserCheck } from 'lucide-react';
+import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, ChevronLeft, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import LanguageSelector from '../components/LanguageSelector';
@@ -12,7 +12,9 @@ function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState({});
   const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
   const observerRef = useRef(null);
+  const carouselRef = useRef(null);
 
   // Contact form state
   const [contactForm, setContactForm] = useState({
@@ -66,6 +68,48 @@ function HomePage() {
       if (observerRef.current) observerRef.current.disconnect();
     };
   }, []);
+
+  // Carousel scroll handler to update current index
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const handleCarouselScroll = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.children[0]?.offsetWidth || 0;
+      const gap = 16; // 4 * 4px (gap-4)
+      const newIndex = Math.round(scrollLeft / (itemWidth + gap));
+      setCurrentServiceIndex(Math.min(newIndex, 4)); // 5 services (0-4)
+    };
+
+    carousel.addEventListener('scroll', handleCarouselScroll);
+    return () => carousel.removeEventListener('scroll', handleCarouselScroll);
+  }, []);
+
+  // Auto-scroll carousel every 4 seconds on mobile
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    // Only auto-scroll on mobile/tablet (lg breakpoint is 1024px)
+    const isDesktop = window.innerWidth >= 1024;
+    if (isDesktop) return;
+
+    const autoScrollInterval = setInterval(() => {
+      const totalServices = 5;
+      const nextIndex = (currentServiceIndex + 1) % totalServices;
+
+      if (carousel.children[nextIndex]) {
+        carousel.children[nextIndex].scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest'
+        });
+      }
+    }, 4000); // Scroll every 4 seconds
+
+    return () => clearInterval(autoScrollInterval);
+  }, [currentServiceIndex]);
 
   const handleContactFormChange = (e) => {
     const { name, value } = e.target;
@@ -146,7 +190,9 @@ function HomePage() {
       description: t('services.homeCareDesc'),
       features: [t('services.feature1') || 'Personal hygiene assistance', t('services.feature2') || 'Meal preparation', t('services.feature3') || 'Mobility support', t('services.feature4') || 'Medication reminders'],
       price: `${t('services.from')} €32/${t('services.hour')}`,
-      color: 'bg-cyan-50 border-cyan-200'
+      color: 'bg-cyan-50 border-cyan-200',
+      image: 'https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg?auto=compress&cs=tinysrgb&w=600',
+      imageAlt: 'Caregiver helping elderly person at home'
     },
     {
       id: 'nursing',
@@ -156,7 +202,9 @@ function HomePage() {
       description: t('services.nursingDesc'),
       features: [t('services.nursingFeature1') || 'Wound care', t('services.nursingFeature2') || 'Injections & medications', t('services.nursingFeature3') || 'Health monitoring', t('services.nursingFeature4') || 'Post-surgery care'],
       price: `${t('services.from')} €59/${t('services.hour')}`,
-      color: 'bg-red-50 border-red-200'
+      color: 'bg-red-50 border-red-200',
+      image: 'https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=600',
+      imageAlt: 'Nurse checking blood pressure of elderly patient'
     },
     {
       id: 'cleaning',
@@ -166,7 +214,9 @@ function HomePage() {
       description: t('services.cleaningDesc'),
       features: [t('services.cleaningFeature1') || 'Regular cleaning', t('services.cleaningFeature2') || 'Deep cleaning', t('services.cleaningFeature3') || 'Window washing', t('services.cleaningFeature4') || 'Moving assistance'],
       price: `${t('services.from')} €37.82/${t('services.hour')}`,
-      color: 'bg-blue-50 border-blue-200'
+      color: 'bg-blue-50 border-blue-200',
+      image: 'https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg?auto=compress&cs=tinysrgb&w=600',
+      imageAlt: 'Professional home cleaning service'
     },
     {
       id: 'palliative',
@@ -176,7 +226,9 @@ function HomePage() {
       description: t('services.palliativeDesc'),
       features: [t('services.palliativeFeature1') || '24/7 care options', t('services.palliativeFeature2') || 'Pain management', t('services.palliativeFeature3') || 'Emotional support', t('services.palliativeFeature4') || 'Family counseling'],
       price: t('services.customPricing') || 'Custom pricing',
-      color: 'bg-rose-50 border-rose-200'
+      color: 'bg-rose-50 border-rose-200',
+      image: 'https://images.pexels.com/photos/7551667/pexels-photo-7551667.jpeg?auto=compress&cs=tinysrgb&w=600',
+      imageAlt: 'Compassionate care for elderly'
     },
     {
       id: 'personal-assistant',
@@ -186,7 +238,9 @@ function HomePage() {
       description: t('services.personalAssistantDesc') || 'Personalized assistance for errands, appointments, shopping, and daily tasks to help you maintain independence.',
       features: [t('services.personalAssistantFeature1') || 'Errand running', t('services.personalAssistantFeature2') || 'Appointment accompaniment', t('services.personalAssistantFeature3') || 'Shopping assistance', t('services.personalAssistantFeature4') || 'Administrative help'],
       price: `${t('services.from')} €35/${t('services.hour')}`,
-      color: 'bg-purple-50 border-purple-200'
+      color: 'bg-purple-50 border-purple-200',
+      image: 'https://images.pexels.com/photos/7551619/pexels-photo-7551619.jpeg?auto=compress&cs=tinysrgb&w=600',
+      imageAlt: 'Personal assistant helping with daily tasks'
     }
   ];
 
@@ -208,7 +262,7 @@ function HomePage() {
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex flex-row items-center justify-between h-20">
             <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer">
               <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden bg-white shadow-lg border-2 border-slate-200">
                 <img
@@ -221,7 +275,10 @@ function HomePage() {
                 <h1 className="font-display text-2xl font-bold text-navy-900" style={{color: '#1e3a5f'}}>Bridge Hoito Oy</h1>
                 <p className="text-xs text-cyan-600">Home Healthcare Services</p>
               </div>
+              
             </Link>
+            
+            
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-6">
@@ -244,18 +301,29 @@ function HomePage() {
             </div>
 
             {/* Mobile Menu Button */}
+           
+                <div className=" md:hidden  ">
+                  <LanguageSelector variant="compact" />
+                </div>
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
+
+            
+            
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-slate-200 max-h-[80vh] overflow-y-auto">
+          
+          
+          <div className="md:hidden  bg-white border-t border-slate-200 max-h-[80vh] overflow-y-auto">
+            
             <div className="px-4 py-6 space-y-4">
               <a href="#services" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.services')}</a>
               <a href="#about" onClick={() => setIsMenuOpen(false)} className="block text-navy-900 hover:text-red-500 transition-colors font-medium" style={{color: '#1e3a5f'}}>{t('nav.about')}</a>
@@ -336,9 +404,12 @@ function HomePage() {
             <div className="relative w-full max-w-md lg:max-w-none mx-auto">
               <div className="relative z-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] sm:aspect-[3/4] lg:aspect-auto">
                 <img
-                  src="https://images.unsplash.com/photo-1576765608622-067973a79f53?w=800&h=600&fit=crop"
-                  alt="Caring healthcare professional with elderly patient"
+                  src="https://plus.unsplash.com/premium_photo-1663054397533-2a3fb0cab5de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aG9tZSUyMGNhcmV8ZW58MHx8MHx8fDA%3D"
+                  alt="Caregiver assisting elderly person at home"
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src = 'https://placehold.co/800x600/D8725F/white?text=Home+Care+Services';
+                  }}
                 />
               </div>
               <div className="hidden sm:block absolute -bottom-6 -right-6 w-48 h-48 bg-red-200 rounded-full -z-10 blur-2xl opacity-60" />
@@ -348,7 +419,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Services Section with Carousel */}
       <section id="services" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
@@ -360,40 +431,131 @@ function HomePage() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          {/* Mobile Carousel */}
+          <div className="lg:hidden relative">
+            <div
+              ref={carouselRef}
+              className="overflow-x-auto snap-x snap-mandatory scrollbar-hide flex gap-4 pb-4"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {services.map((service, idx) => (
+                <div
+                  key={service.id}
+                  className={`${service.color} border-2 rounded-2xl flex-shrink-0 w-[85vw] sm:w-[45vw] snap-center overflow-hidden`}
+                >
+                  {/* Service Image */}
+                  <div className="relative h-40 sm:h-48 overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.imageAlt}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = `https://placehold.co/600x400/D8725F/white?text=${encodeURIComponent(service.title)}`;
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute bottom-3 left-3 w-10 h-10 bg-white/90 rounded-xl flex items-center justify-center shadow-md">
+                      <service.icon size={20} className="text-red-500" />
+                    </div>
+                  </div>
+
+                  {/* Service Content */}
+                  <div className="p-4 sm:p-5">
+                    <h3 className="font-display text-lg sm:text-xl font-bold mb-1" style={{color: '#1e3a5f'}}>{service.title}</h3>
+                    <p className="text-xs text-slate-600 mb-2">{service.subtitle}</p>
+                    <p className="text-sm text-slate-700 leading-relaxed mb-3 line-clamp-2">{service.description}</p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {service.features.slice(0, 3).map((feature, fIdx) => (
+                        <span key={fIdx} className="inline-flex items-center text-xs bg-white/80 px-2 py-1 rounded-full">
+                          <Check size={12} className="text-red-500 mr-1" />
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+
+                    <Link
+                      to="/appointments"
+                      className="block w-full py-2.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl text-white font-semibold text-center text-sm shadow-sm"
+                    >
+                      {t('hero.bookNow') || 'Book Now'}
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Carousel Indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              {services.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setCurrentServiceIndex(idx);
+                    carouselRef.current?.children[idx]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                  }}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    currentServiceIndex === idx ? 'bg-red-500 w-6' : 'bg-slate-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Grid with Images */}
+          <div className="hidden lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service, idx) => (
               <div
                 key={service.id}
-                className={`${service.color} border-2 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 cursor-pointer active:scale-[0.98]`}
+                className={`${service.color} border-2 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group`}
                 onClick={() => setActiveService(activeService === service.id ? null : service.id)}
               >
-                <div className="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
-                    <service.icon size={24} className="text-red-500 sm:hidden" />
-                    <service.icon size={28} className="text-red-500 hidden sm:block lg:hidden" />
-                    <service.icon size={32} className="text-red-500 hidden lg:block" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-display text-lg sm:text-xl lg:text-2xl font-bold mb-1 truncate" style={{color: '#1e3a5f'}}>{service.title}</h3>
-                    <p className="text-xs sm:text-sm text-slate-600">{service.subtitle}</p>
+                {/* Service Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.imageAlt}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.target.src = `https://placehold.co/600x400/D8725F/white?text=${encodeURIComponent(service.title)}`;
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-4 left-4 w-12 h-12 bg-white/90 rounded-2xl flex items-center justify-center shadow-lg">
+                    <service.icon size={24} className="text-red-500" />
                   </div>
                 </div>
-                <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-3 sm:mb-4 line-clamp-3">{service.description}</p>
 
-                {activeService === service.id && (
-                  <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-4 border-t-2 border-white animate-fadeInUp">
-                    {service.features.map((feature, fIdx) => (
-                      <div key={fIdx} className="flex items-center space-x-2 text-xs sm:text-sm">
-                        <Check size={14} className="text-red-500 flex-shrink-0 sm:hidden" />
-                        <Check size={16} className="text-red-500 flex-shrink-0 hidden sm:block" />
-                        <span className="text-slate-700">{feature}</span>
-                      </div>
-                    ))}
-                    <div className="mt-3 sm:mt-4 px-3 sm:px-4 py-2 sm:py-3 bg-white rounded-lg sm:rounded-xl text-center font-bold text-red-500 shadow-sm text-sm sm:text-base">
-                      {service.price}
+                {/* Service Content */}
+                <div className="p-6 lg:p-8">
+                  <h3 className="font-display text-xl lg:text-2xl font-bold mb-1" style={{color: '#1e3a5f'}}>{service.title}</h3>
+                  <p className="text-sm text-slate-600 mb-3">{service.subtitle}</p>
+                  <p className="text-base text-slate-700 leading-relaxed mb-4">{service.description}</p>
+
+                  {activeService === service.id && (
+                    <div className="space-y-3 pt-4 border-t-2 border-white animate-fadeInUp">
+                      {service.features.map((feature, fIdx) => (
+                        <div key={fIdx} className="flex items-center space-x-2 text-sm">
+                          <Check size={16} className="text-red-500 flex-shrink-0" />
+                          <span className="text-slate-700">{feature}</span>
+                        </div>
+                      ))}
                     </div>
+                  )}
+
+                  <div className="mt-4 flex gap-2">
+                    <button className="flex-1 py-2.5 bg-white rounded-xl text-red-500 font-semibold hover:bg-red-50 transition-colors shadow-sm">
+                      {t('services.learnMore') || 'Learn More'}
+                    </button>
+                    <Link
+                      to="/appointments"
+                      className="flex-1 py-2.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl text-white font-semibold hover:shadow-lg transition-all text-center"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {t('hero.bookNow') || 'Book Now'}
+                    </Link>
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>
@@ -916,6 +1078,7 @@ function HomePage() {
                 <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.nursing')}</a></li>
                 <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.cleaning')}</a></li>
                 <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.palliativeCare')}</a></li>
+                <li><a href="#services" className="hover:text-red-400 transition-colors">{t('footer.personalAssistant')}</a></li>
               </ul>
             </div>
 

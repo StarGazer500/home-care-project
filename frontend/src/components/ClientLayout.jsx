@@ -87,6 +87,11 @@ function ClientLayout() {
                   Client
                 </div>
               </div>
+
+                <div className=" md:hidden  ">
+                  <LanguageSelector variant="compact" />
+                </div>
+
               <button
                 onClick={handleLogout}
                 className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
@@ -94,6 +99,8 @@ function ClientLayout() {
                 <LogOut size={18} />
                 <span className="hidden md:inline">{t('nav.logout')}</span>
               </button>
+
+              
 
               {/* Mobile Menu Button */}
               <button
