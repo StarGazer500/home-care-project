@@ -99,13 +99,13 @@ function HomePage() {
       const totalServices = 5;
       const nextIndex = (currentServiceIndex + 1) % totalServices;
 
-      if (carousel.children[nextIndex]) {
-        carousel.children[nextIndex].scrollIntoView({
-          behavior: 'smooth',
-          inline: 'center',
-          block: 'nearest'
-        });
-      }
+      const itemWidth = carousel.children[0]?.offsetWidth || 0;
+      const gap = 16; // gap-4 = 16px
+      const scrollPosition = nextIndex * (itemWidth + gap);
+      carousel.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
     }, 4000); // Scroll every 4 seconds
 
     return () => clearInterval(autoScrollInterval);
@@ -188,7 +188,7 @@ function HomePage() {
       title: t('services.homeCare'),
       subtitle: t('services.homeCareSubtitle') || 'Daily living assistance',
       description: t('services.homeCareDesc'),
-      features: [t('services.feature1') || 'Personal hygiene assistance', t('services.feature2') || 'Meal preparation', t('services.feature3') || 'Mobility support', t('services.feature4') || 'Medication reminders'],
+      features: [t('services.homeCareFeature1') || 'Personal hygiene assistance', t('services.homeCareFeature2') || 'Meal preparation', t('services.homeCareFeature3') || 'Mobility support', t('services.homeCareFeature4') || 'Medication reminders'],
       price: `${t('services.from')} €32/${t('services.hour')}`,
       color: 'bg-cyan-50 border-cyan-200',
       image: 'https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -203,7 +203,7 @@ function HomePage() {
       features: [t('services.nursingFeature1') || 'Wound care', t('services.nursingFeature2') || 'Injections & medications', t('services.nursingFeature3') || 'Health monitoring', t('services.nursingFeature4') || 'Post-surgery care'],
       price: `${t('services.from')} €59/${t('services.hour')}`,
       color: 'bg-red-50 border-red-200',
-      image: 'https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: 'https://images.unsplash.com/photo-1576765608866-5b51046452be?q=80&w=878&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       imageAlt: 'Nurse checking blood pressure of elderly patient'
     },
     {
@@ -363,7 +363,7 @@ function HomePage() {
                 <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{color: '#1e3a5f'}}>
                   {t('hero.title1')}
                   <br />
-                  <span className="text-red-500">{t('hero.title2')}</span>
+                  <span className="text-red-500 text-2xl sm:text-3xl lg:text-4xl xl:text-5xl">{t('hero.title2')}</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   {t('hero.subtitle')}

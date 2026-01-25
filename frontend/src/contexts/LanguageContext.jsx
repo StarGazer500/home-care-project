@@ -24,8 +24,8 @@ const translations = {
     // Hero Section
     hero: {
     
-      title1: 'Care That Feels',
-      title2: 'Like Home',
+      title1: 'Bridge Hoito Oy',
+      title2: 'A Bridge to Quality Home Care',
       subtitle: 'Professional healthcare services delivered with warmth, compassion, and respect in the comfort of your own home.',
       bookAppointment: 'Book Appointment',
       ourServices: 'Explore Our Services',
@@ -358,8 +358,8 @@ const translations = {
     // Hero Section
     hero: {
       badge: 'Luotettava kumppani vuodesta 2008',
-      title1: 'Hoitoa joka tuntuu',
-      title2: 'Kodilta',
+      title1: 'Bridge Hoito Oy',
+      title2: 'Silta laadukkaaseen kotihoitoon',
       subtitle: 'Ammattimaiset terveyspalvelut lämmöllä, myötätunnolla ja kunnioituksella oman kotisi mukavuudessa.',
       bookAppointment: 'Varaa aika',
       ourServices: 'Tutustu palveluihimme',
@@ -692,8 +692,8 @@ const translations = {
     // Hero Section
     hero: {
       badge: 'Pålitlig sedan 2008',
-      title1: 'Vård som känns',
-      title2: 'Som hemma',
+      title1: 'Bridge Hoito Oy',
+      title2: 'En bro till kvalitativ hemvård',
       subtitle: 'Professionella hälsovårdstjänster levererade med värme, medkänsla och respekt i ditt eget hems bekvämlighet.',
       bookAppointment: 'Boka tid',
       ourServices: 'Utforska våra tjänster',
@@ -727,6 +727,22 @@ const translations = {
       personalAssistantFeature2: 'Läkarbesöksföljning',
       personalAssistantFeature3: 'Shoppinghjälp',
       personalAssistantFeature4: 'Administrativ hjälp',
+      homeCareFeature1: 'Personlig hygienhjälp',
+      homeCareFeature2: 'Matlagning',
+      homeCareFeature3: 'Rörlighetsstöd',
+      homeCareFeature4: 'Läkemedelspåminnelser',
+      nursingFeature1: 'Sårvård',
+      nursingFeature2: 'Injektioner och mediciner',
+      nursingFeature3: 'Hälsoövervakning',
+      nursingFeature4: 'Efteroperativ vård',
+      cleaningFeature1: 'Regelbunden städning',
+      cleaningFeature2: 'Djupstädning',
+      cleaningFeature3: 'Fönsterputsning',
+      cleaningFeature4: 'Flytthjälp',
+      palliativeFeature1: '24/7 vårdmöjligheter',
+      palliativeFeature2: 'Smärthantering',
+      palliativeFeature3: 'Emotionellt stöd',
+      palliativeFeature4: 'Familjerådgivning',
       customPricing: 'Anpassad prissättning',
       learnMore: 'Läs mer',
       from: 'Från',
