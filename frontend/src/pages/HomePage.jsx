@@ -273,7 +273,7 @@ function HomePage() {
               </div>
               <div>
                 <h1 className="font-display text-2xl font-bold text-navy-900" style={{color: '#1e3a5f'}}>Bridge Hoito Oy</h1>
-                <p className="text-xs text-cyan-600">Home Healthcare Services</p>
+                <p className="text-xs text-cyan-600">{t('nav.tagline')}</p>
               </div>
               
             </Link>
@@ -363,7 +363,7 @@ function HomePage() {
                 <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight" style={{color: '#1e3a5f'}}>
                   {t('hero.title1')}
                   <br />
-                  <span className="text-red-500 text-2xl sm:text-3xl lg:text-4xl xl:text-5xl">{t('hero.title2')}</span>
+                  <span className="text-red-500">{t('hero.title2')}</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   {t('hero.subtitle')}

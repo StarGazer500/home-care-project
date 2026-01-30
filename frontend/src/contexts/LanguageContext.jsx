@@ -20,12 +20,13 @@ const translations = {
       users: 'Users',
       feedback: 'Feedback',
       contact: 'Contact',
+      tagline: 'A Bridge to Quality Home Care',
     },
     // Hero Section
     hero: {
     
-      title1: 'Bridge Hoito Oy',
-      title2: 'A Bridge to Quality Home Care',
+      title1: 'Care That Feels',
+      title2: 'Like Home',
       subtitle: 'Professional healthcare services delivered with warmth, compassion, and respect in the comfort of your own home.',
       bookAppointment: 'Book Appointment',
       ourServices: 'Explore Our Services',
@@ -354,12 +355,13 @@ const translations = {
       users: 'Käyttäjät',
       feedback: 'Palaute',
       contact: 'Yhteystiedot',
+      tagline: 'Silta laadukkaaseen kotihoitoon',
     },
     // Hero Section
     hero: {
       badge: 'Luotettava kumppani vuodesta 2008',
-      title1: 'Bridge Hoito Oy',
-      title2: 'Silta laadukkaaseen kotihoitoon',
+      title1: 'Hoitoa joka tuntuu',
+      title2: 'Kodilta',
       subtitle: 'Ammattimaiset terveyspalvelut lämmöllä, myötätunnolla ja kunnioituksella oman kotisi mukavuudessa.',
       bookAppointment: 'Varaa aika',
       ourServices: 'Tutustu palveluihimme',
@@ -688,12 +690,13 @@ const translations = {
       users: 'Användare',
       feedback: 'Feedback',
       contact: 'Kontakt',
+      tagline: 'En bro till kvalitativ hemvård',
     },
     // Hero Section
     hero: {
       badge: 'Pålitlig sedan 2008',
-      title1: 'Bridge Hoito Oy',
-      title2: 'En bro till kvalitativ hemvård',
+      title1: 'Vård som känns',
+      title2: 'Som hemma',
       subtitle: 'Professionella hälsovårdstjänster levererade med värme, medkänsla och respekt i ditt eget hems bekvämlighet.',
       bookAppointment: 'Boka tid',
       ourServices: 'Utforska våra tjänster',
