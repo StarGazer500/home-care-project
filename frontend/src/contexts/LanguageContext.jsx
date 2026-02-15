@@ -453,7 +453,7 @@ const translations = {
       emergency: 'Hätätapaukset',
       emergencyAvailable: '24/7 Saatavilla',
       serviceArea: 'Palvelualue',
-      serviceAreaText: 'Helsinki, Espoo ja pääkaupunkiseutu',
+      serviceAreaText: 'Helsinki, Vantaa, Kerava ja pääkaupunkiseutu',
     },
     // Pricing
     pricing: {
@@ -788,7 +788,7 @@ const translations = {
       emergency: 'Akut',
       emergencyAvailable: 'Tillgänglig 24/7',
       serviceArea: 'Tjänsteområde',
-      serviceAreaText: 'Helsingfors, Esbo & Huvudstadsregionen',
+      serviceAreaText: 'Helsingfors, Vanda, Kervo och Storhelsingfors',
     },
     // Pricing
     pricing: {

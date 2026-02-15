@@ -901,7 +901,7 @@ function HomePage() {
                   <div>
                     <div className="font-bold mb-1 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('contact.phone')}</div>
                     <a href="tel:+358961500069" className="text-slate-600 hover:text-red-500 transition-colors text-sm sm:text-base">
-                      +358 (09) 615 000 69
+                      +3584579244212
                     </a>
                   </div>
                 </div>
@@ -913,7 +913,7 @@ function HomePage() {
                   <div>
                     <div className="font-bold mb-1 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('contact.email')}</div>
                     <a href="mailto:info@bridgehoito.fi" className="text-slate-600 hover:text-red-500 transition-colors text-sm sm:text-base break-all">
-                      info@bridgehoito.fi
+                      otelesika@gmail.com
                     </a>
                   </div>
                 </div>
@@ -1109,7 +1109,7 @@ function HomePage() {
           </div>
 
           <div className="pt-6 sm:pt-8 border-t border-slate-700 text-center text-xs sm:text-sm text-slate-400">
-            <p>© 2025 Bridge Hoito Oy. {t('footer.rights')}</p>
+            <p>© 2026 Bridge Hoito Oy. {t('footer.rights')}</p>
           </div>
         </div>
       </footer>
