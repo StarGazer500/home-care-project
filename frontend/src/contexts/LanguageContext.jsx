@@ -118,7 +118,7 @@ const translations = {
       emergency: 'Emergency',
       emergencyAvailable: '24/7 Available',
       serviceArea: 'Service Area',
-      serviceAreaText: 'Helsinki, Espoo & Greater Helsinki Area',
+      serviceAreaText: 'Helsinki, Vantaa, Kerava and Greater Helsinki Area',
     },
     // Pricing
     pricing: {
