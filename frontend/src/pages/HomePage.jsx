@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, ChevronLeft, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare, UserCheck } from 'lucide-react';
+import { Heart, Home, Stethoscope, Sparkles, Phone, Mail, MapPin, ChevronRight, ChevronLeft, Check, Menu, X, Users, Clock, Shield, Award, Star, Calendar, MessageSquare, UserCheck, Moon, Sun, CalendarDays, Ticket, FileText, Calculator, Footprints, HeartHandshake, Info, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import LanguageSelector from '../components/LanguageSelector';
@@ -611,151 +611,364 @@ function HomePage() {
       {/* Pricing Section */}
       <section id="pricing" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4" style={{color: '#1e3a5f'}}>
-              {t('pricing.title')} <span className="text-red-500">{t('pricing.titleHighlight')}</span>
+              {t('pricingPage.heroTitle')}
             </h2>
             <p className="text-lg sm:text-xl text-slate-600">
-              {t('pricing.subtitle')}
+              {t('pricingPage.heroSubtitle')}
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-            {/* Home Care */}
-            <div className="bg-cyan-50 border-2 border-cyan-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
-                  <Home className="text-cyan-600" size={20} />
+          {/* ── Service Price List ── */}
+          <div className="mb-12 sm:mb-16">
+            <h3 className="font-display text-xl sm:text-2xl font-bold mb-1 sm:mb-2" style={{color: '#1e3a5f'}}>
+              {t('pricingPage.serviceRatesTitle')}
+            </h3>
+            <p className="text-sm sm:text-base text-slate-500 mb-5 sm:mb-6">{t('pricingPage.serviceRatesSubtitle')}</p>
+
+            <div className="bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 overflow-hidden shadow-sm">
+              {/* Table Header */}
+              <div className="hidden sm:grid sm:grid-cols-3 bg-slate-50 px-6 py-4 border-b-2 border-slate-200">
+                <div className="col-span-2 font-bold text-sm uppercase tracking-wider" style={{color: '#1e3a5f'}}>{t('pricingPage.service')}</div>
+                <div className="text-right font-bold text-sm uppercase tracking-wider" style={{color: '#1e3a5f'}}>{t('pricingPage.price')}</div>
+              </div>
+
+              {/* Row: Home Care */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-center space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Home className="text-cyan-600" size={20} />
+                  </div>
+                  <span className="font-semibold text-base sm:text-lg" style={{color: '#1e3a5f'}}>{t('pricingPage.homeCare')}</span>
                 </div>
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.homeCare')}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.homeCareSubtitle')}</p>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <span className="font-display text-2xl sm:text-3xl font-bold text-red-500">€52<span className="text-sm sm:text-base text-slate-500 font-normal ml-1">{t('pricingPage.perHour')}</span></span>
                 </div>
               </div>
-              <div className="mb-4 sm:mb-6">
-                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€32<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.homeCareRate')}</p>
+
+              {/* Row: Nursing */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-start space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Stethoscope className="text-red-500" size={20} />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-base sm:text-lg block" style={{color: '#1e3a5f'}}>{t('pricingPage.homeNursing')}</span>
+                    <span className="text-xs text-slate-400 italic">{t('pricingPage.homeNursingNote')}</span>
+                  </div>
+                </div>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <span className="font-display text-2xl sm:text-3xl font-bold text-red-500">€59<span className="text-sm sm:text-base text-slate-500 font-normal ml-1">{t('pricingPage.perHour')}</span></span>
+                </div>
               </div>
-              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature1')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature2')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.homeCareFeature3')}</li>
-              </ul>
+
+              {/* Row: Foot Care */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-start space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Footprints className="text-orange-500" size={20} />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-base sm:text-lg block" style={{color: '#1e3a5f'}}>{t('pricingPage.footCare')}</span>
+                    <span className="text-xs text-slate-400 italic">{t('pricingPage.footCareNote')}</span>
+                  </div>
+                </div>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <div className="font-display text-2xl sm:text-3xl font-bold text-red-500">€85<span className="text-sm sm:text-base text-slate-500 font-normal ml-1">{t('pricingPage.perVisit')}</span></div>
+                  <span className="text-xs text-slate-500">{t('pricingPage.footCareDemanding')}: +€35</span>
+                </div>
+              </div>
+
+              {/* Row: Family Caregiver Support */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-center space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-pink-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <HeartHandshake className="text-pink-500" size={20} />
+                  </div>
+                  <span className="font-semibold text-base sm:text-lg" style={{color: '#1e3a5f'}}>{t('pricingPage.familyCaregiverSupport')}</span>
+                </div>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <span className="font-display text-2xl sm:text-3xl font-bold text-red-500">€41<span className="text-sm sm:text-base text-slate-500 font-normal ml-1">{t('pricingPage.perHour')}</span></span>
+                </div>
+              </div>
+
+              {/* Row: Cleaning */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-start space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="text-blue-600" size={20} />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-base sm:text-lg block" style={{color: '#1e3a5f'}}>{t('pricingPage.cleaning')}</span>
+                    <span className="text-xs text-slate-400 italic">{t('pricingPage.cleaningVoucher')}: €37{t('pricingPage.perHour')}</span>
+                  </div>
+                </div>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <span className="font-display text-2xl sm:text-3xl font-bold text-red-500">€41<span className="text-sm sm:text-base text-slate-500 font-normal ml-1">{t('pricingPage.perHour')}</span></span>
+                </div>
+              </div>
+
+              {/* Row: Personal Assistant */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-start space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <UserCheck className="text-purple-600" size={20} />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-base sm:text-lg block" style={{color: '#1e3a5f'}}>{t('pricingPage.personalAssistant')}</span>
+                    <span className="text-xs text-slate-400 italic">{t('pricingPage.personalAssistantNote')}</span>
+                  </div>
+                </div>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <span className="font-display text-2xl sm:text-3xl font-bold text-red-500">€37<span className="text-sm sm:text-base text-slate-500 font-normal ml-1">{t('pricingPage.perHour')}</span></span>
+                </div>
+              </div>
+
+              {/* Row: Palliative Care */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-4 sm:py-5 hover:bg-slate-50 transition-colors">
+                <div className="col-span-2 flex items-center space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-rose-50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Heart className="text-rose-500" size={20} />
+                  </div>
+                  <span className="font-semibold text-base sm:text-lg" style={{color: '#1e3a5f'}}>{t('pricingPage.palliativeCare')}</span>
+                </div>
+                <div className="text-left sm:text-right pl-13 sm:pl-0">
+                  <span className="inline-block px-4 py-1.5 bg-rose-50 text-rose-600 rounded-full text-sm font-semibold border border-rose-200">
+                    {t('pricingPage.contactForQuote')}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Nursing */}
-            <div className="bg-red-50 border-2 border-red-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
-                  <Stethoscope className="text-red-500" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.nursing')}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.nursingSubtitle')}</p>
-                </div>
+            {/* One-time visit surcharge + VAT note */}
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5">
+                <AlertCircle size={16} className="text-amber-500 flex-shrink-0" />
+                <span className="text-sm text-slate-700">
+                  <span className="font-semibold">{t('pricingPage.oneTimeVisitSurcharge')}:</span> {t('pricingPage.oneTimeVisitAmount')}
+                </span>
               </div>
-              <div className="mb-4 sm:mb-6">
-                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€59<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.nursingRate')}</p>
-              </div>
-              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature1')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature2')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.nursingFeature3')}</li>
-              </ul>
-            </div>
-
-            {/* Cleaning */}
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
-                  <Sparkles className="text-blue-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.cleaning')}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.cleaningSubtitle')}</p>
-                </div>
-              </div>
-              <div className="mb-4 sm:mb-6">
-                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€37.82<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.cleaningRate')}</p>
-              </div>
-              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature1')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature2')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.cleaningFeature3')}</li>
-              </ul>
-            </div>
-
-            {/* Palliative */}
-            <div className="bg-rose-50 border-2 border-rose-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
-                  <Heart className="text-red-500" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.palliative')}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.palliativeSubtitle')}</p>
-                </div>
-              </div>
-              <div className="mb-4 sm:mb-6">
-                <div className="font-display text-2xl sm:text-3xl font-bold text-red-500 mb-1 sm:mb-2">{t('pricing.customQuote')}</div>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.palliativeRate')}</p>
-              </div>
-              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature1')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature2')}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.palliativeFeature3')}</li>
-              </ul>
-            </div>
-
-            {/* Personal Assistant */}
-            <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 hover:shadow-lg transition-shadow sm:col-span-2">
-              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
-                  <UserCheck className="text-purple-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold" style={{color: '#1e3a5f'}}>{t('pricing.personalAssistant') || 'Personal Assistant'}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">{t('pricing.personalAssistantSubtitle') || 'Your dedicated helper'}</p>
-                </div>
-              </div>
-              <div className="mb-4 sm:mb-6">
-                <div className="font-display text-3xl sm:text-4xl font-bold text-red-500 mb-1 sm:mb-2">€35<span className="text-lg sm:text-xl text-slate-600">{t('pricing.perHour')}</span></div>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.personalAssistantRate') || 'Personalized assistance services'}</p>
-              </div>
-              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-700">
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.personalAssistantFeature1') || 'Errand running'}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.personalAssistantFeature2') || 'Appointment accompaniment'}</li>
-                <li className="flex items-start"><Check size={14} className="text-red-500 mr-2 mt-0.5 flex-shrink-0" />{t('pricing.personalAssistantFeature3') || 'Shopping assistance'}</li>
-              </ul>
+              <p className="text-sm text-slate-500 text-center sm:text-right">{t('pricingPage.vatNote')}</p>
             </div>
           </div>
 
-          {/* Additional Info */}
-          <div className="mt-8 sm:mt-12 bg-slate-50 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
-              <div className="p-3 sm:p-0">
-                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</div>
-                <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricing.serviceVouchers')}</h4>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.serviceVouchersDesc')}</p>
+          {/* ── Surcharges ── */}
+          <div className="mb-12 sm:mb-16">
+            <h3 className="font-display text-xl sm:text-2xl font-bold mb-1 sm:mb-2" style={{color: '#1e3a5f'}}>
+              {t('pricingPage.surchargesTitle')}
+            </h3>
+            <p className="text-sm sm:text-base text-slate-500 mb-5 sm:mb-6">{t('pricingPage.surchargesSubtitle')}</p>
+
+            {/* Surcharges table */}
+            <div className="bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 overflow-hidden shadow-sm">
+              <div className="hidden sm:grid sm:grid-cols-3 bg-slate-50 px-6 py-3 border-b-2 border-slate-200">
+                <div className="font-bold text-sm uppercase tracking-wider" style={{color: '#1e3a5f'}}></div>
+                <div className="font-bold text-sm uppercase tracking-wider text-slate-500"></div>
+                <div className="text-right font-bold text-sm uppercase tracking-wider" style={{color: '#1e3a5f'}}></div>
               </div>
-              <div className="p-3 sm:p-0">
-                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</div>
-                <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricing.flexiblePlans')}</h4>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.flexiblePlansDesc')}</p>
+
+              {/* Evening */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 hover:bg-amber-50/50 transition-colors">
+                <div className="flex items-center space-x-3 mb-1 sm:mb-0">
+                  <Sun className="text-amber-500 flex-shrink-0" size={18} />
+                  <span className="font-semibold text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricingPage.eveningLabel')}</span>
+                </div>
+                <div className="text-xs sm:text-sm text-slate-500 pl-8 sm:pl-0">{t('pricingPage.eveningTime')}</div>
+                <div className="text-left sm:text-right pl-8 sm:pl-0">
+                  <span className="font-display text-xl sm:text-2xl font-bold text-red-500">{t('pricingPage.eveningSurcharge')}</span>
+                </div>
               </div>
-              <div className="p-3 sm:p-0">
-                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</div>
-                <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricing.noHiddenFees')}</h4>
-                <p className="text-xs sm:text-sm text-slate-600">{t('pricing.noHiddenFeesDesc')}</p>
+
+              {/* Night */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 hover:bg-indigo-50/50 transition-colors">
+                <div className="flex items-center space-x-3 mb-1 sm:mb-0">
+                  <Moon className="text-indigo-500 flex-shrink-0" size={18} />
+                  <span className="font-semibold text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricingPage.nightLabel')}</span>
+                </div>
+                <div className="text-xs sm:text-sm text-slate-500 pl-8 sm:pl-0">{t('pricingPage.nightTime')}</div>
+                <div className="text-left sm:text-right pl-8 sm:pl-0">
+                  <span className="font-display text-xl sm:text-2xl font-bold text-red-500">{t('pricingPage.nightSurcharge')}</span>
+                </div>
+              </div>
+
+              {/* Saturday */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 hover:bg-teal-50/50 transition-colors">
+                <div className="flex items-center space-x-3 mb-1 sm:mb-0">
+                  <CalendarDays className="text-teal-500 flex-shrink-0" size={18} />
+                  <span className="font-semibold text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricingPage.saturdayLabel')}</span>
+                </div>
+                <div className="text-xs sm:text-sm text-slate-500 pl-8 sm:pl-0">{t('pricingPage.saturdayTime')}</div>
+                <div className="text-left sm:text-right pl-8 sm:pl-0">
+                  <span className="font-display text-xl sm:text-2xl font-bold text-red-500">{t('pricingPage.saturdaySurcharge')}</span>
+                </div>
+              </div>
+
+              {/* Sunday & Holidays */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 hover:bg-red-50/50 transition-colors">
+                <div className="flex items-center space-x-3 mb-1 sm:mb-0">
+                  <CalendarDays className="text-red-500 flex-shrink-0" size={18} />
+                  <span className="font-semibold text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricingPage.sundayLabel')}</span>
+                </div>
+                <div className="text-xs sm:text-sm text-slate-500 pl-8 sm:pl-0">{t('pricingPage.sundayTime')}</div>
+                <div className="text-left sm:text-right pl-8 sm:pl-0">
+                  <span className="font-display text-xl sm:text-2xl font-bold text-red-500">{t('pricingPage.sundaySurcharge')}</span>
+                </div>
+              </div>
+
+              {/* Eve of Public Holidays */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 items-start sm:items-center px-4 sm:px-6 py-3.5 sm:py-4 hover:bg-red-50/50 transition-colors">
+                <div className="flex items-center space-x-3 mb-1 sm:mb-0">
+                  <CalendarDays className="text-red-400 flex-shrink-0" size={18} />
+                  <span className="font-semibold text-sm sm:text-base" style={{color: '#1e3a5f'}}>{t('pricingPage.holidayEveLabel')}</span>
+                </div>
+                <div className="text-xs sm:text-sm text-slate-500 pl-8 sm:pl-0">{t('pricingPage.holidayEveTime')}</div>
+                <div className="text-left sm:text-right pl-8 sm:pl-0">
+                  <span className="font-display text-xl sm:text-2xl font-bold text-red-500">{t('pricingPage.holidayEveSurcharge')}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Service Voucher ── */}
+          <div className="mb-12 sm:mb-16">
+            <div className="bg-cyan-50 border-2 border-cyan-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8">
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                  <Ticket className="text-cyan-600" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{color: '#1e3a5f'}}>
+                    {t('pricingPage.serviceVouchersTitle')}
+                  </h3>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3">
+                    {t('pricingPage.serviceVouchersDesc')}
+                  </p>
+                  <div className="flex items-start gap-2 bg-white border border-cyan-200 rounded-lg px-3 py-2">
+                    <Info size={14} className="text-cyan-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm text-slate-600 italic">{t('pricingPage.serviceVouchersNote')}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Billing & Invoicing ── */}
+          <div className="mb-12 sm:mb-16">
+            <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8">
+              <div className="flex items-start space-x-4 mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                  <FileText className="text-amber-600" size={20} />
+                </div>
+                <h3 className="font-display text-xl sm:text-2xl font-bold pt-2" style={{color: '#1e3a5f'}}>
+                  {t('pricingPage.billingTitle')}
+                </h3>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 ml-0 sm:ml-16">
+                <div className="flex items-start gap-2">
+                  <Check size={14} className="text-green-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-700 font-medium">{t('pricingPage.billingAssessment')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingCarePlan')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingMinimum')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingCleaning')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingPersonalAssistant')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingIncrements')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingTravel')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingFrequency')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingPaymentTerms')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingLateInterest')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingPaperInvoice')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check size={14} className="text-green-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.billingEInvoice')}</span>
+                </div>
+                <div className="flex items-start gap-2 sm:col-span-2">
+                  <AlertCircle size={14} className="text-amber-500 mt-1 flex-shrink-0" />
+                  <span className="text-sm text-slate-700 font-medium">{t('pricingPage.billingCancellation')}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Household Tax Deduction ── */}
+          <div>
+            <div className="bg-green-50 border-2 border-green-200 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8">
+              <div className="flex items-start space-x-4 mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                  <Calculator className="text-green-600" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{color: '#1e3a5f'}}>
+                    {t('pricingPage.deductionTitle')}
+                  </h3>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-4">
+                    {t('pricingPage.deductionDesc')}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3 ml-0 sm:ml-16 mb-4">
+                <div className="flex items-center bg-white rounded-lg px-3 py-2.5 border border-green-200">
+                  <Check size={14} className="text-green-600 mr-2 flex-shrink-0" />
+                  <span className="text-sm text-slate-700">{t('pricingPage.deductionMaxAmount')}</span>
+                </div>
+                <div className="flex items-center bg-white rounded-lg px-3 py-2.5 border border-green-200">
+                  <Check size={14} className="text-green-600 mr-2 flex-shrink-0" />
+                  <span className="text-sm text-slate-700">{t('pricingPage.deductionPercentage')}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2 ml-0 sm:ml-16">
+                <div className="flex items-start gap-2">
+                  <AlertCircle size={14} className="text-amber-500 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-slate-600 italic">{t('pricingPage.deductionNursingNote')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Info size={14} className="text-green-600 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-slate-600">{t('pricingPage.deductionVatNote')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ChevronRight size={14} className="text-green-600 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-slate-600 font-medium">{t('pricingPage.deductionMoreInfo')}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-     
 
       {/* Feedback Section */}
       <section id="feedback" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
